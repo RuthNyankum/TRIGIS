@@ -1,0 +1,110 @@
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+  66% {
+    transform: translateY(-10px) rotate(-3deg);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(204, 212, 49, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(204, 212, 49, 0.6);
+  }
+}
+
+@keyframes blink {
+  0%, 50% {
+    border-right-color: var(--brand-yellow);
+  }
+  51%, 100% {
+    border-right-color: transparent;
+  }
+}
+
+/* Utility Classes */
+.floating-icon {
+  animation: float 6s ease-in-out infinite;
+}
+
+.hero-text {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.typing-text {
+  border-right: 2px solid var(--brand-yellow);
+  animation: blink 1s infinite;
+}
+
+.gradient-text {
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-btn {
+  background: var(--brand-gradient);
+  transition: all 0.3s ease;
+}
+
+.hero-btn:hover {
+  transform: translateY(-2px);
+  animation: pulse-glow 2s infinite;
+}
+
+.hero-btn-outline {
+  border: 2px solid var(--brand-purple);
+  color: var(--brand-purple);
+  transition: all 0.3s ease;
+}
+
+.hero-btn-outline:hover {
+  background: var(--brand-purple);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* If you're missing these, add them to your CSS */
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8,0,1,1);
+  }
+  50% {
+    transform: none;
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: .5;
+  }
+}

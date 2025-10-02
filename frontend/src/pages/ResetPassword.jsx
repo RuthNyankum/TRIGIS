@@ -6,7 +6,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import loginIcons from "../assets/images/trigis.jpg";
 
 const ResetPassword = () => {
-  const { token } = useParams(); // comes from URL
+  const { token } = useParams();
   const navigate = useNavigate();
 
   const [password, setPassword] = useState("");

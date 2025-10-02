@@ -3,7 +3,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import RootLayout from "./layout/RootLayout";
-import Home from "./pages/Home";
+import Home from "./pages/home/Index";
 import About from "./pages/About";
 import Services from "./pages/Services";
 import Courses from "./pages/Courses";
@@ -12,6 +12,7 @@ import SignUp from "./pages/Signup";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import ServiceDetail from "./pages/ServiceDetail";
 
 function App() {
   const router = createBrowserRouter([
@@ -28,15 +29,15 @@ function App() {
           element: <About />,
         },
         {
-          path: "services",
+          path: "/services",
           element: <Services />,
         },
         {
-          path: "courses",
+          path: "/courses",
           element: <Courses />,
         },
         {
-          path: "contact-us",
+          path: "/contact-us",
           element: <Contact />,
         },
         {
@@ -54,6 +55,11 @@ function App() {
         {
           path: "reset-password/:token",
           element: <ResetPassword />,
+        },
+        {
+          // path: "service-detail",
+          path: "/services/:serviceId",
+          element: <ServiceDetail />,
         },
       ],
     },
