@@ -6,90 +6,32 @@ import {
   MdBook,
   MdEdit,
   MdPeople,
-  MdEmojiEvents,
   MdArrowForward,
   MdFavorite,
   MdArrowUpward,
 } from "react-icons/md";
+import { NavLink, useNavigate } from "react-router";
+import logo from "../assets/images/trigis1.png";
+
 import {
-  FaFacebookF,
-  FaTwitter,
-  FaInstagram,
-  FaLinkedinIn,
-  FaYoutube,
-} from "react-icons/fa";
+  services,
+  courses,
+  quickLinks,
+  socialLinks,
+} from "../constants/footerLinks";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-
-  const services = [
-    { name: "Blog Writing", href: "/services/blog-writing" },
-    { name: "Copywriting", href: "/services/copywriting" },
-    { name: "Content Strategy", href: "/services/content-strategy" },
-    { name: "Ghostwriting", href: "/services/ghostwriting" },
-    { name: "SEO Content", href: "/services/seo-content" },
-    { name: "Email Marketing", href: "/services/email-marketing" },
-  ];
-
-  const courses = [
-    { name: "Freelance Writing Mastery", href: "/courses/freelance-mastery" },
-    { name: "Copywriting Fundamentals", href: "/courses/copywriting-101" },
-    { name: "Content Marketing Blueprint", href: "/courses/content-marketing" },
-    { name: "SEO Writing Course", href: "/courses/seo-writing" },
-    { name: "Email Marketing Mastery", href: "/courses/email-marketing" },
-  ];
-
-  const quickLinks = [
-    { name: "About Us", href: "/about-us" },
-    { name: "Portfolio", href: "/portfolio" },
-    { name: "Testimonials", href: "/testimonials" },
-    { name: "Blog", href: "/blog" },
-    { name: "FAQ", href: "/faq" },
-    { name: "Contact", href: "/contact-us" },
-  ];
-
-  const socialLinks = [
-    {
-      name: "Facebook",
-      icon: FaFacebookF,
-      href: "#",
-      color: "hover:text-blue-600",
-    },
-    {
-      name: "Twitter",
-      icon: FaTwitter,
-      href: "#",
-      color: "hover:text-sky-500",
-    },
-    {
-      name: "Instagram",
-      icon: FaInstagram,
-      href: "#",
-      color: "hover:text-pink-500",
-    },
-    {
-      name: "LinkedIn",
-      icon: FaLinkedinIn,
-      href: "#",
-      color: "hover:text-blue-700",
-    },
-    {
-      name: "YouTube",
-      icon: FaYoutube,
-      href: "#",
-      color: "hover:text-red-500",
-    },
-  ];
+  const navigate = useNavigate();
 
   const handleLinkClick = (href) => {
-    console.log(`Navigating to: ${href}`);
-    // In real app, this would be handled by React Router
+    navigate(href);
   };
 
   return (
     <footer className="bg-gray-900 text-white">
       {/* Newsletter Section */}
-      <div
+      {/* <div
         className="text-white"
         style={{ backgroundImage: "var(--brand-gradient)" }}
       >
@@ -123,51 +65,57 @@ const Footer = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* Company Info */}
           <div className="lg:col-span-2">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="h-12 w-12 rounded-xl bg-[var(--brand-gradient)] flex items-center justify-center">
-                <span className="text-white font-bold text-lg font-playfair">
-                  W
-                </span>
-              </div>
-              <div>
-                <h2 className="text-xl font-bold font-playfair bg-[var(--brand-gradient)] bg-clip-text text-transparent">
-                  WriterPro
-                </h2>
-                <p className="text-gray-400 text-sm font-inter">
-                  Freelance Writing Services
+            <NavLink
+              to="/"
+              className="flex items-center space-x-3 group cursor-pointer"
+              onClick={() => setIsOpen(false)}
+            >
+              <img
+                src={logo}
+                alt="Trigis Consult Logo"
+                className="h-12 lg:h-16 w-auto object-contain"
+              />
+              <div className="hidden sm:block">
+                <h1
+                  className="text-xl lg:text-2xl font-bold font-playfair bg-clip-text text-transparent"
+                  style={{ backgroundImage: "var(--brand-gradient)" }}
+                >
+                  TRIGIS
+                </h1>
+                <p className="text-xs text-gray-600 -mt-1 font-inter font-medium">
+                  CONSULT
                 </p>
               </div>
-            </div>
+            </NavLink>
 
             <p className="text-gray-300 mb-6 leading-relaxed font-inter">
-              Transforming ideas into compelling content that drives results.
-              With over 5 years of experience, I help businesses tell their
-              stories and train aspiring writers to build successful careers.
+              Trigis Consult provides reliable academic and professional writing
+              services for students, researchers, and professionals.
             </p>
 
             {/* Contact Info */}
             <div className="space-y-3 mb-6">
               <div className="flex items-center space-x-3 text-gray-300">
                 <MdEmail size={18} className="text-[var(--brand-purple)]" />
-                <span className="font-inter">hello@writerpro.com</span>
+                <span className="font-inter">gyesiagnes22@gmail.com</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-300">
                 <MdPhone size={18} className="text-[var(--brand-purple)]" />
-                <span className="font-inter">+233 XX XXX XXXX</span>
+                <span className="font-inter">+233 54 378 113</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-300">
                 <MdLocationOn
                   size={18}
                   className="text-[var(--brand-purple)]"
                 />
-                <span className="font-inter">Accra, Ghana</span>
+                <span className="font-inter">Cape Coast, Ghana</span>
               </div>
             </div>
 
@@ -200,7 +148,7 @@ const Footer = () => {
                 <li key={service.name}>
                   <button
                     onClick={() => handleLinkClick(service.href)}
-                    className="text-gray-400 hover:text-[var(--brand-yellow)] transition-colors duration-200 font-inter text-sm hover:translate-x-1 transform"
+                    className="text-gray-400 hover:text-[var(--brand-yellow)] transition-colors duration-200 font-inter text-sm hover:translate-x-1 transform cursor-pointer"
                   >
                     {service.name}
                   </button>
@@ -240,7 +188,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <button
                     onClick={() => handleLinkClick(link.href)}
-                    className="text-gray-400 hover:text-[var(--brand-yellow)] transition-colors duration-200 font-inter text-sm hover:translate-x-1 transform"
+                    className="text-gray-400 hover:text-[var(--brand-yellow)] transition-colors duration-200 font-inter text-sm hover:translate-x-1 transform cursor-pointer"
                   >
                     {link.name}
                   </button>
@@ -294,14 +242,14 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
             <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm text-gray-400 font-inter">
-              <p>© {currentYear} WriterPro. All rights reserved.</p>
+              <p>© {currentYear} Trigis Consult All rights reserved.</p>
               <div className="flex items-center space-x-1">
                 <span>Made with</span>
                 <MdFavorite
                   size={16}
                   className="text-[var(--brand-purple)] animate-pulse"
                 />
-                <span>in Ghana</span>
+                <span>by Ruth</span>
               </div>
             </div>
 

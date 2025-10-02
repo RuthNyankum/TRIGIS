@@ -1,0 +1,60 @@
+/* Services.css */
+.gradient-bg {
+  background: linear-gradient(
+    135deg,
+    var(--brand-purple) 0%,
+    var(--brand-yellow) 100%
+  );
+}
+
+.gradient-text {
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.service-card {
+  transition: all 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px rgba(126, 19, 148, 0.15);
+}
+
+.active-service {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px rgba(126, 19, 148, 0.2);
+  border: 2px solid var(--brand-yellow);
+}
+
+.process-step {
+  transition: all 0.3s ease;
+}
+
+.process-step:hover {
+  transform: scale(1.05);
+}
