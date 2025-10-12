@@ -80,11 +80,11 @@ const Navbar = () => {
             {/* CTA Button */}
             <div className="hidden lg:flex items-center space-x-4">
               <NavLink
-                to="/courses"
+                to="/login"
                 className="relative text-white px-6 py-2.5 rounded-xl text-sm font-semibold transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-xl font-inter overflow-hidden"
                 style={{ backgroundImage: "var(--brand-gradient)" }}
               >
-                <span className="relative z-10">Start Learning</span>
+                <span className="relative z-10">Login</span>
               </NavLink>
             </div>
 
@@ -135,13 +135,13 @@ const Navbar = () => {
               {/* Mobile CTA */}
               <div className="pt-4 border-t border-gray-100">
                 <NavLink
-                  to="/courses"
+                  to="/login"
                   onClick={() => setIsOpen(false)}
                   className="flex items-center justify-center w-full text-white px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 shadow-md font-inter"
                   style={{ backgroundImage: "var(--brand-gradient)" }}
                 >
                   <HiAcademicCap size={18} className="mr-2" />
-                  Start Learning
+                  Login
                 </NavLink>
               </div>
             </div>

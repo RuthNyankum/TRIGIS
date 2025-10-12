@@ -4,7 +4,6 @@ import {
   FaTwitter,
   FaLinkedinIn,
   FaInstagram,
-  // FaPen,
   FaBookOpen,
   FaLaptop,
   FaChartLine,
@@ -15,19 +14,11 @@ import {
   FaPen,
   FaUserTie,
   FaBook,
-  // FaChartLine,
+  FaShieldAlt,
+  FaAward,
+  FaHandsHelping,
+  FaSyncAlt,
 } from "react-icons/fa";
-
-// import {
-//   FaGraduationCap,
-//   FaFileAlt,
-//   FaSearch,
-//   FaCheckCircle,
-//   FaPen,
-//   FaUserTie,
-//   FaBook,
-//   FaChartLine,
-// } from "react-icons/fa";
 
 // Words
 export const WORDS = [
@@ -302,5 +293,36 @@ export const services = [
     icon: FaGraduationCap,
     title: "Assignment Assistance",
     description: "Support with academic assignments",
+  },
+];
+
+export const companyValues = [
+  {
+    icon: FaShieldAlt,
+    title: "Integrity",
+    description:
+      "We deliver honest, original, and plagiarism-free work while upholding ethical standards in every project.",
+    color: "text-yellow-500",
+  },
+  {
+    icon: FaAward,
+    title: "Excellence",
+    description:
+      "We pursue the highest quality in research, writing, and presentation to exceed client expectations.",
+    color: "text-blue-500",
+  },
+  {
+    icon: FaHandsHelping,
+    title: "Customer-Centered Service",
+    description:
+      "We prioritize clear communication and tailor our solutions to meet each client’s unique goals.",
+    color: "text-purple-500",
+  },
+  {
+    icon: FaSyncAlt,
+    title: "Continuous Improvement",
+    description:
+      "We continuously refine our processes, skills, and tools to stay current and deliver better results.",
+    color: "text-green-500",
   },
 ];

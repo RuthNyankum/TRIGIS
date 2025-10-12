@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import loginIcons from "../assets/images/trigis.jpg";
+import loginIcons from "../../assets/images/trigis.jpg";
 import { toast } from "react-toastify";
-import api from "../config/axios";
+import api from "../../config/axios";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
