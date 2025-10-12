@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import loginIcons from "../assets/images/trigis.jpg";
+import loginIcons from "../../assets/images/trigis.jpg";
 import { FaEye, FaEyeSlash, FaUserPlus, FaShieldAlt } from "react-icons/fa";
 import { Link } from "react-router";
 import { toast } from "react-toastify";
-import api from "../config/axios";
+import api from "../../config/axios";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);

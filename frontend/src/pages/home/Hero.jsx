@@ -7,7 +7,7 @@ import {
   FaBookOpen,
   FaLaptop,
 } from "react-icons/fa";
-import "./home.css";
+import "../../styles/home.css";
 import { WORDS, SOCIAL_LINKS, FLOATING_ICONS } from "../../constants/home";
 
 const Hero = () => {
@@ -119,34 +119,6 @@ const Hero = () => {
                 <FaChartLine size={18} />
                 Our Expertise
               </button>
-            </div>
-
-            {/* Metrics */}
-            <div className="grid grid-cols-3 gap-6 pt-8 border-t border-purple-300/20 relative z-20">
-              <div className="text-center">
-                <div className="text-2xl lg:text-3xl font-bold text-[var(--brand-yellow)] font-inter">
-                  500+
-                </div>
-                <div className="text-sm text-purple-200 font-inter">
-                  Projects Delivered
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl lg:text-3xl font-bold text-[var(--brand-yellow)] font-inter">
-                  98%
-                </div>
-                <div className="text-sm text-purple-200 font-inter">
-                  Client Satisfaction
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl lg:text-3xl font-bold text-[var(--brand-yellow)] font-inter">
-                  5+
-                </div>
-                <div className="text-sm text-purple-200 font-inter">
-                  Years Experience
-                </div>
-              </div>
             </div>
 
             {/* Social Links */}

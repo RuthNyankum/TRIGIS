@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router";
-import api from "../config/axios";
+import api from "../../config/axios";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
-import loginIcons from "../assets/images/trigis.jpg";
+import loginIcons from "../../assets/images/trigis.jpg";
 
 const ResetPassword = () => {
   const { token } = useParams();

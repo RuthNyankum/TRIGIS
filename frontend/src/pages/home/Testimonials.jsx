@@ -5,7 +5,7 @@ import {
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
-import { TESTIMONIALS } from "../../constants/home"; // adjust path as needed
+import { TESTIMONIALS } from "../../constants/home";
 
 const Testimonials = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -126,34 +126,6 @@ const Testimonials = () => {
               }`}
             />
           ))}
-        </div>
-
-        {/* Stats Section */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mt-16 pt-16 border-t border-white/20">
-          <div className="text-center">
-            <div className="text-3xl lg:text-4xl font-bold text-yellow-400 font-inter mb-2">
-              500+
-            </div>
-            <div className="text-purple-200 font-inter">Happy Clients</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl lg:text-4xl font-bold text-yellow-400 font-inter mb-2">
-              98%
-            </div>
-            <div className="text-purple-200 font-inter">Satisfaction Rate</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl lg:text-4xl font-bold text-yellow-400 font-inter mb-2">
-              250%
-            </div>
-            <div className="text-purple-200 font-inter">Avg. Growth</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl lg:text-4xl font-bold text-yellow-400 font-inter mb-2">
-              5+
-            </div>
-            <div className="text-purple-200 font-inter">Years Experience</div>
-          </div>
         </div>
       </div>
     </section>

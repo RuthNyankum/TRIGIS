@@ -15,7 +15,7 @@ import {
   FaLightbulb,
 } from "react-icons/fa";
 
-import { services } from "../constants/services";
+import { services } from "../../constants/services";
 
 const testimonials = [
   {

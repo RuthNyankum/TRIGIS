@@ -6,7 +6,6 @@ import {
   MdBook,
   MdEdit,
   MdPeople,
-  MdArrowForward,
   MdFavorite,
   MdArrowUpward,
 } from "react-icons/md";

@@ -10,78 +10,15 @@ import {
   FaAward,
   FaFacebook,
 } from "react-icons/fa";
-import "../styles/about.css";
-import ceo from "../assets/images/ceo1.jpg";
-import {
-  companyValues,
-  milestones,
-  ceoAchievements,
-  stats,
-} from "../constants/aboutData";
+import "../../styles/about.css";
+import ceo from "../../assets/images/ceo1.jpg";
+import { companyValues } from "../../constants/home";
 
 const About = () => {
   const [activeTab, setActiveTab] = useState("company");
 
   return (
     <>
-      {/* Custom Styles */}
-      {/* <style jsx>{`
-        .gradient-bg {
-          background: linear-gradient(
-            135deg,
-            var(--brand-purple) 0%,
-            var(--brand-yellow) 100%
-          );
-        }
-
-        .gradient-text {
-          background: var(--brand-gradient);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: translateX(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        .animate-fadeInUp {
-          animation: fadeInUp 0.8s ease-out forwards;
-        }
-
-        .animate-slideIn {
-          animation: slideIn 0.6s ease-out forwards;
-        }
-
-        .tab-active {
-          background: var(--brand-gradient);
-          color: white;
-        }
-
-        .value-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 20px 40px rgba(126, 19, 148, 0.15);
-        }
-      `}</style> */}
-
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header for the section */}
@@ -265,72 +202,6 @@ const About = () => {
                   })}
                 </div>
               </div>
-
-              {/* Company Timeline */}
-              <div className="mb-16">
-                <h3 className="text-3xl font-bold font-playfair text-center mb-12 text-gray-900">
-                  Our Journey
-                </h3>
-                <div className="max-w-4xl mx-auto">
-                  <div className="relative">
-                    {/* Timeline Line */}
-                    <div className="absolute left-1/2 transform -translate-x-0.5 h-full w-1 bg-gradient-to-b from-[var(--brand-purple)] to-[var(--brand-yellow)]"></div>
-
-                    {milestones.map((milestone, index) => (
-                      <div
-                        key={index}
-                        className={`relative flex items-center mb-12 ${
-                          index % 2 === 0 ? "justify-start" : "justify-end"
-                        }`}
-                      >
-                        <div
-                          className={`w-5/12 ${
-                            index % 2 === 0
-                              ? "pr-8 text-right"
-                              : "pl-8 text-left"
-                          }`}
-                        >
-                          <div className="bg-white rounded-xl p-6 shadow-lg">
-                            <div className="text-lg font-bold text-[var(--brand-purple)] font-inter mb-2">
-                              {milestone.year}
-                            </div>
-                            <h6 className="text-xl font-semibold font-playfair mb-2 text-gray-900">
-                              {milestone.event}
-                            </h6>
-                            <p className="text-gray-600 font-inter">
-                              {milestone.description}
-                            </p>
-                          </div>
-                        </div>
-
-                        {/* Timeline Dot */}
-                        <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-[var(--brand-yellow)] border-4 border-white shadow-lg"></div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Company Stats */}
-              {/* <div className="gradient-bg rounded-2xl p-12">
-                <h3 className="text-3xl font-bold font-playfair text-center mb-12 text-white">
-                  Our Impact in Numbers
-                </h3>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                  {stats.map((stat, index) => {
-                    const Icon = stat.icon;
-                    return (
-                      <div key={index} className="text-center text-white">
-                        <Icon size={40} className="mx-auto mb-4" />
-                        <div className="text-4xl font-bold font-inter mb-2">
-                          {stat.number}
-                        </div>
-                        <div className="text-lg font-inter">{stat.label}</div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div> */}
             </div>
           )}
 
@@ -440,35 +311,6 @@ const About = () => {
                       <span>Contact</span>
                     </a>
                   </div>
-                </div>
-              </div>
-
-              {/* CEO Achievements */}
-              <div className="mb-16">
-                <h4 className="text-3xl font-bold font-playfair text-center mb-12 text-gray-900">
-                  Achievements & Credentials
-                </h4>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {ceoAchievements.map((achievement, index) => {
-                    const Icon = achievement.icon;
-                    return (
-                      <div
-                        key={index}
-                        className="bg-white rounded-xl p-6 shadow-lg text-center hover:shadow-xl transition-shadow duration-300"
-                      >
-                        <Icon
-                          className="text-[var(--brand-purple)] mx-auto mb-4"
-                          size={32}
-                        />
-                        <h6 className="text-lg font-semibold font-playfair mb-2 text-gray-900">
-                          {achievement.title}
-                        </h6>
-                        <p className="text-gray-600 font-inter text-sm">
-                          {achievement.description}
-                        </p>
-                      </div>
-                    );
-                  })}
                 </div>
               </div>
 

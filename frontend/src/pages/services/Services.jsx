@@ -12,25 +12,13 @@ import {
   FaDownload,
   FaClock,
 } from "react-icons/fa";
-import "../styles/services.css";
+import "../../styles/services.css";
 
-import { services, processSteps, testimonials } from "../constants/services";
+import { services, processSteps, testimonials } from "../../constants/services";
 import { Link } from "react-router";
 
 const Services = () => {
   const [activeService, setActiveService] = useState(0);
-
-  // const getColorClasses = (color) => {
-  //   const colors = {
-  //     purple: "bg-purple-500 text-white",
-  //     blue: "bg-blue-500 text-white",
-  //     green: "bg-green-500 text-white",
-  //     yellow: "bg-yellow-500 text-white",
-  //     red: "bg-red-500 text-white",
-  //     indigo: "bg-indigo-500 text-white",
-  //   };
-  //   return colors[color] || "bg-purple-500 text-white";
-  // };
 
   return (
     <section className="py-20 bg-white">
@@ -266,58 +254,6 @@ const Services = () => {
                 </div>
               );
             })}
-          </div>
-        </div>
-
-        {/* Testimonials */}
-        <div className="mb-16">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold font-playfair mb-4 text-gray-900">
-              What Our <span className="gradient-text">Clients Say</span>
-            </h3>
-            <p className="text-lg text-gray-600 font-inter">
-              Don't just take our word for it - hear from businesses we've
-              helped grow.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300"
-              >
-                <div className="flex mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <FaStar
-                      key={i}
-                      className="text-[var(--brand-yellow)]"
-                      size={16}
-                    />
-                  ))}
-                </div>
-
-                <FaQuoteLeft
-                  className="text-[var(--brand-purple)] mb-4"
-                  size={20}
-                />
-                <p className="text-gray-700 font-inter mb-6 italic leading-relaxed">
-                  "{testimonial.content}"
-                </p>
-
-                <div className="border-t border-gray-100 pt-4">
-                  <div className="font-semibold text-gray-900 font-inter">
-                    {testimonial.name}
-                  </div>
-                  <div className="text-[var(--brand-purple)] text-sm font-inter">
-                    {testimonial.role}
-                  </div>
-                  <div className="text-gray-600 text-sm font-inter">
-                    {testimonial.company}
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
 
