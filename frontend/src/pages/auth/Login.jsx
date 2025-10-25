@@ -13,7 +13,7 @@ import api from "../../config/axios";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -21,13 +21,10 @@ const Login = () => {
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-
-    setData((prev) => {
-      return {
-        ...prev,
-        [name]: value,
-      };
-    });
+    setData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -35,9 +32,33 @@ const Login = () => {
 
     try {
       const response = await api.post("/auth/login", data);
-
       console.log("Login success:", response.data);
+
       toast.success("Login successful! 🎉");
+
+      const { user, token } = response.data;
+
+      //  Save token & user in localStorage
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      // Navigate based on role
+      // if (user?.role === "admin") {
+      //   navigate("/admin/dashboard");
+      // } else if (user?.role === "student") {
+      //   navigate("/student/dashboard");
+      // } else {
+      //   navigate("/"); // fallback
+      // }
+      if (user.role === "superadmin") {
+        navigate("/admin/dashboard");
+      } else if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (user.role === "student") {
+        navigate("/student/dashboard");
+      } else {
+        navigate("/");
+      }
 
       setData({ email: "", password: "" });
     } catch (error) {
@@ -46,10 +67,6 @@ const Login = () => {
         error.response?.data?.message || "Login failed. Please try again."
       );
     }
-
-    // if (user?.success) {
-    //   navigate("/", { replace: true });
-    // }
   };
 
   return (
@@ -189,7 +206,7 @@ const Login = () => {
               <div className="flex-grow h-px bg-gray-200"></div>
             </div>
 
-            {/* Social Login Options (Optional - you can remove if not needed) */}
+            {/* Social Login Options */}
             <div className="space-y-3">
               <button
                 type="button"

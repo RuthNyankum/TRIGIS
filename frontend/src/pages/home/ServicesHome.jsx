@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import { FaArrowRight } from "react-icons/fa";
-import { homeServices } from "../../constants/services";
+import { services } from "../../constants/home";
+// import { homeServices } from "../../constants/home";
 
 const ServicesShowcase = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const ServicesShowcase = () => {
 
         {/* Services Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {homeServices.map((service, index) => {
+          {services.map((service, index) => {
             const Icon = service.icon;
             return (
               <div

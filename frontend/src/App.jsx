@@ -13,7 +13,7 @@ import Home from "./pages/home/Home";
 import Courses from "./pages/courses/Courses";
 import Contact from "./pages/contact/Contact";
 import Services from "./pages/services/Services";
-import ServiceDetails from "./pages/services/ServiceDetail";
+import ServiceDetail from "./pages/services/ServiceDetail";
 
 // ===== Auth Pages =====
 import Login from "./pages/auth/Login";
@@ -24,18 +24,24 @@ import ResetPassword from "./pages/auth/ResetPassword";
 // ===== Dashboard Pages =====
 import StudentDashboard from "./pages/dashboard/student/Dashboard";
 import StudentCourses from "./pages/dashboard/student/Courses";
-import StudentProgress from "./pages/dashboard/student/Progress";
+// import BrowseCourses from "./pages/dashboard/student/Browse";
+import Achievements from "./pages/dashboard/student/Achievements";
+import PurchaseHistory from "./pages/dashboard/student/PurchaseHistory";
 import StudentProfile from "./pages/dashboard/student/Profile";
 
-import OrganizerDashboard from "./pages/dashboard/organizer/OrganizerDashboard";
-import ManageCourses from "./pages/dashboard/organizer/Courses";
-import ManageStudents from "./pages/dashboard/organizer/Students";
-import ManageServices from "./pages/dashboard/organizer/Services";
-import Reports from "./pages/dashboard/organizer/Reports";
+import AdminDashboard from "./pages/dashboard/admin/AdminDashboard";
+import ManageCourses from "./pages/dashboard/admin/Courses";
+import ManageStudents from "./pages/dashboard/admin/Students";
+import ManageServices from "./pages/dashboard/admin/Services";
+import Reports from "./pages/dashboard/admin/Reports";
+import AdminSettings from "./pages/dashboard/admin/Settings";
+import ManageAdmins from "./pages/dashboard/admin/ManageAdmins";
+// import ManageServices from "./pages/dashboard/admin/ManageServices";
 
 // ===== Error Pages =====
 import NotFound from "./pages/errors/NotFound";
 import Unauthorized from "./pages/errors/Uauthorised";
+import SuperAdminRoute from "./pages/dashboard/admin/SuperAdminRoute";
 
 function App() {
   const router = createBrowserRouter([
@@ -48,7 +54,7 @@ function App() {
         { path: "contact-us", element: <Contact /> },
         { path: "courses", element: <Courses /> },
         { path: "services", element: <Services /> },
-        { path: "services/:serviceId", element: <ServiceDetails /> },
+        { path: "services/:serviceId", element: <ServiceDetail /> },
       ],
     },
 
@@ -64,23 +70,39 @@ function App() {
       ],
     },
 
-    // ===== Dashboard Routes =====
     {
-      path: "/dashboard",
-      element: <DashboardLayout />,
+      path: "/student",
+      element: <DashboardLayout userRole="student" />,
       children: [
-        // Student Routes
-        { index: true, element: <StudentDashboard /> },
-        { path: "student/courses", element: <StudentCourses /> },
-        { path: "student/progress", element: <StudentProgress /> },
-        { path: "student/profile", element: <StudentProfile /> },
+        { path: "dashboard", element: <StudentDashboard /> },
+        { path: "courses", element: <StudentCourses /> },
+        // { path: "browse", element: <BrowseCourses /> },
+        { path: "achievements", element: <Achievements /> },
+        { path: "purchases", element: <PurchaseHistory /> },
+        { path: "profile", element: <StudentProfile /> },
+      ],
+    },
 
-        // Organizer Routes
-        { path: "organizer", element: <OrganizerDashboard /> },
-        { path: "organizer/courses", element: <ManageCourses /> },
-        { path: "organizer/students", element: <ManageStudents /> },
-        { path: "organizer/services", element: <ManageServices /> },
-        { path: "organizer/reports", element: <Reports /> },
+    // ===== Admin/Organizer Dashboard Routes =====
+
+    {
+      path: "/admin",
+      element: <DashboardLayout userRole="admin" />,
+      children: [
+        { path: "dashboard", element: <AdminDashboard /> },
+        { path: "courses", element: <ManageCourses /> },
+        { path: "students", element: <ManageStudents /> },
+        { path: "services", element: <ManageServices /> },
+        {
+          path: "admins",
+          element: (
+            <SuperAdminRoute>
+              <ManageAdmins />
+            </SuperAdminRoute>
+          ),
+        },
+        { path: "settings", element: <AdminSettings /> },
+        // { path: "services", element: <ManageServices /> },
       ],
     },
 

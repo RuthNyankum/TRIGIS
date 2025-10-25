@@ -1,603 +1,613 @@
-import React, { useState } from "react";
-import {
-  FaBookOpen,
-  FaPlay,
-  FaClock,
-  FaAward,
-  FaCheckCircle,
-  FaStar,
-  FaInfinity,
-} from "react-icons/fa";
+// import React, { useState } from "react";
+// import {
+//   FaSearch,
+//   FaFilter,
+//   FaStar,
+//   FaDollarSign,
+//   FaClock,
+//   FaUsers,
+//   FaArrowRight,
+//   FaShoppingCart,
+//   FaBookOpen,
+//   FaCode,
+//   FaPalette,
+//   FaBullhorn,
+//   FaChartLine,
+//   FaGraduationCap,
+//   FaPlay,
+//   FaCheckCircle,
+// } from "react-icons/fa";
+
+// const Courses = () => {
+//   const [searchTerm, setSearchTerm] = useState("");
+//   const [selectedCategory, setSelectedCategory] = useState("all");
+//   const [selectedLevel, setSelectedLevel] = useState("all");
+//   const [priceRange, setPriceRange] = useState("all");
+//   const [sortBy, setSortBy] = useState("newest");
+
+//   const colorClasses = {
+//     purple: "bg-gradient-to-br from-purple-500 to-purple-600",
+//     blue: "bg-gradient-to-br from-blue-500 to-blue-600",
+//     green: "bg-gradient-to-br from-green-500 to-green-600",
+//     red: "bg-gradient-to-br from-red-500 to-red-600",
+//     yellow: "bg-gradient-to-br from-yellow-500 to-yellow-600",
+//     indigo: "bg-gradient-to-br from-indigo-500 to-indigo-600",
+//     teal: "bg-gradient-to-br from-teal-500 to-teal-600",
+//     pink: "bg-gradient-to-br from-pink-500 to-pink-600",
+//   };
+
+//   const iconMap = {
+//     FaCode: FaCode,
+//     FaPalette: FaPalette,
+//     FaBullhorn: FaBullhorn,
+//     FaChartLine: FaChartLine,
+//     FaGraduationCap: FaGraduationCap,
+//     FaBookOpen: FaBookOpen,
+//   };
+
+//   const categories = [
+//     { name: "All", value: "all", icon: FaBookOpen },
+//     { name: "Programming", value: "Programming", icon: FaCode },
+//     { name: "Design", value: "Design", icon: FaPalette },
+//     { name: "Marketing", value: "Marketing", icon: FaBullhorn },
+//     { name: "Data Science", value: "Data Science", icon: FaChartLine },
+//     { name: "Business", value: "Business", icon: FaGraduationCap },
+//   ];
+
+//   const [courses, setCourses] = useState([
+//     {
+//       id: 1,
+//       title: "Advanced JavaScript Mastery",
+//       description:
+//         "Master advanced JavaScript concepts including async programming, closures, and modern ES6+ features.",
+//       category: "Programming",
+//       level: "Advanced",
+//       price: 49.99,
+//       instructor: "John Smith",
+//       instructorId: "john-smith",
+//       thumbnail: null,
+//       defaultCardColor: "blue",
+//       rating: 4.8,
+//       totalRatings: 324,
+//       enrolledStudents: 2145,
+//       totalLessons: 48,
+//       duration: "12 hours",
+//       learningOutcomes: [
+//         "Master async/await patterns",
+//         "Understand closures and scope",
+//         "Build production-ready applications",
+//       ],
+//       isBestseller: true,
+//       isNew: false,
+//     },
+//     {
+//       id: 2,
+//       title: "React Fundamentals 2024",
+//       description:
+//         "Learn React from scratch with hooks, state management, and modern best practices for building web applications.",
+//       category: "Programming",
+//       level: "Beginner",
+//       price: 39.99,
+//       instructor: "Sarah Johnson",
+//       instructorId: "sarah-johnson",
+//       thumbnail: null,
+//       defaultCardColor: "purple",
+//       rating: 4.7,
+//       totalRatings: 289,
+//       enrolledStudents: 3421,
+//       totalLessons: 35,
+//       duration: "10 hours",
+//       learningOutcomes: [
+//         "Build interactive UIs with React",
+//         "Master React Hooks",
+//         "Manage application state effectively",
+//       ],
+//       isBestseller: true,
+//       isNew: true,
+//     },
+//     {
+//       id: 3,
+//       title: "UI/UX Design Masterclass",
+//       description:
+//         "Complete guide to UI/UX design principles, tools, and practical project workflows for professional designers.",
+//       category: "Design",
+//       level: "Intermediate",
+//       price: 59.99,
+//       instructor: "Mike Davis",
+//       instructorId: "mike-davis",
+//       thumbnail: null,
+//       defaultCardColor: "pink",
+//       rating: 4.9,
+//       totalRatings: 256,
+//       enrolledStudents: 1876,
+//       totalLessons: 52,
+//       duration: "15 hours",
+//       learningOutcomes: [
+//         "Master design principles",
+//         "Create user research studies",
+//         "Build design systems",
+//       ],
+//       isBestseller: false,
+//       isNew: false,
+//     },
+//     {
+//       id: 4,
+//       title: "Python for Data Science",
+//       description:
+//         "Learn Python programming focused on data analysis, visualization, and machine learning fundamentals.",
+//       category: "Data Science",
+//       level: "Beginner",
+//       price: 44.99,
+//       instructor: "Emma Wilson",
+//       instructorId: "emma-wilson",
+//       thumbnail: null,
+//       defaultCardColor: "green",
+//       rating: 4.6,
+//       totalRatings: 198,
+//       enrolledStudents: 1523,
+//       totalLessons: 42,
+//       duration: "11 hours",
+//       learningOutcomes: [
+//         "Write efficient Python code",
+//         "Analyze data with Pandas and NumPy",
+//         "Create data visualizations",
+//       ],
+//       isBestseller: false,
+//       isNew: true,
+//     },
+//     {
+//       id: 5,
+//       title: "Digital Marketing Strategy",
+//       description:
+//         "Complete digital marketing course covering SEO, social media, email marketing, and analytics.",
+//       category: "Marketing",
+//       level: "Intermediate",
+//       price: 34.99,
+//       instructor: "Tom Brown",
+//       instructorId: "tom-brown",
+//       thumbnail: null,
+//       defaultCardColor: "red",
+//       rating: 4.5,
+//       totalRatings: 145,
+//       enrolledStudents: 987,
+//       totalLessons: 28,
+//       duration: "8 hours",
+//       learningOutcomes: [
+//         "Master SEO optimization",
+//         "Create effective social media campaigns",
+//         "Analyze marketing metrics",
+//       ],
+//       isBestseller: false,
+//       isNew: false,
+//     },
+//     {
+//       id: 6,
+//       title: "Business Development & Growth",
+//       description:
+//         "Learn strategies to grow your business, develop business plans, and scale your ventures effectively.",
+//       category: "Business",
+//       level: "Intermediate",
+//       price: 54.99,
+//       instructor: "Lisa Anderson",
+//       instructorId: "lisa-anderson",
+//       thumbnail: null,
+//       defaultCardColor: "indigo",
+//       rating: 4.7,
+//       totalRatings: 176,
+//       enrolledStudents: 1234,
+//       totalLessons: 38,
+//       duration: "10 hours",
+//       learningOutcomes: [
+//         "Develop business strategies",
+//         "Create growth plans",
+//         "Analyze market opportunities",
+//       ],
+//       isBestseller: true,
+//       isNew: false,
+//     },
+//     {
+//       id: 7,
+//       title: "Web Development Bootcamp",
+//       description:
+//         "Comprehensive web development course covering HTML, CSS, JavaScript, and full-stack development.",
+//       category: "Programming",
+//       level: "Beginner",
+//       price: 79.99,
+//       instructor: "Alex Turner",
+//       instructorId: "alex-turner",
+//       thumbnail: null,
+//       defaultCardColor: "teal",
+//       rating: 4.8,
+//       totalRatings: 412,
+//       enrolledStudents: 4567,
+//       totalLessons: 65,
+//       duration: "18 hours",
+//       learningOutcomes: [
+//         "Build responsive websites",
+//         "Understand backend technologies",
+//         "Deploy applications to production",
+//       ],
+//       isBestseller: true,
+//       isNew: false,
+//     },
+//     {
+//       id: 8,
+//       title: "Graphic Design Essentials",
+//       description:
+//         "Learn graphic design fundamentals including typography, color theory, and design tools.",
+//       category: "Design",
+//       level: "Beginner",
+//       price: 44.99,
+//       instructor: "Rachel Green",
+//       instructorId: "rachel-green",
+//       thumbnail: null,
+//       defaultCardColor: "yellow",
+//       rating: 4.4,
+//       totalRatings: 89,
+//       enrolledStudents: 567,
+//       totalLessons: 24,
+//       duration: "6 hours",
+//       learningOutcomes: [
+//         "Master design principles",
+//         "Use design tools professionally",
+//         "Create stunning graphics",
+//       ],
+//       isBestseller: false,
+//       isNew: true,
+//     },
+//   ]);
+
+//   // Filter and sort courses
+//   let filteredCourses = courses.filter((course) => {
+//     const matchesSearch =
+//       course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//       course.description.toLowerCase().includes(searchTerm.toLowerCase());
+//     const matchesCategory =
+//       selectedCategory === "all" || course.category === selectedCategory;
+//     const matchesLevel =
+//       selectedLevel === "all" || course.level === selectedLevel;
+
+//     let matchesPrice = true;
+//     if (priceRange === "free") matchesPrice = course.price === 0;
+//     else if (priceRange === "paid-low")
+//       matchesPrice = course.price > 0 && course.price <= 50;
+//     else if (priceRange === "paid-mid")
+//       matchesPrice = course.price > 50 && course.price <= 100;
+//     else if (priceRange === "paid-high") matchesPrice = course.price > 100;
+
+//     return matchesSearch && matchesCategory && matchesLevel && matchesPrice;
+//   });
+
+//   // Sort courses
+//   if (sortBy === "newest") {
+//     filteredCourses.sort((a, b) => b.id - a.id);
+//   } else if (sortBy === "popular") {
+//     filteredCourses.sort((a, b) => b.enrolledStudents - a.enrolledStudents);
+//   } else if (sortBy === "rating") {
+//     filteredCourses.sort((a, b) => b.rating - a.rating);
+//   } else if (sortBy === "price-low") {
+//     filteredCourses.sort((a, b) => a.price - b.price);
+//   } else if (sortBy === "price-high") {
+//     filteredCourses.sort((a, b) => b.price - a.price);
+//   }
+
+//   const bestsellerCourses = filteredCourses
+//     .filter((c) => c.isBestseller)
+//     .slice(0, 4);
+
+//   return (
+//     <div className="min-h-screen bg-gray-50">
+//       {/* Hero Section */}
+//       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-12 mb-8">
+//         <div className="max-w-7xl mx-auto px-4">
+//           <h1 className="text-4xl font-bold mb-4">Explore Courses</h1>
+//           <p className="text-blue-100 text-lg">
+//             Learn new skills from industry experts
+//           </p>
+//         </div>
+//       </div>
+
+//       <div className="max-w-7xl mx-auto px-4">
+//         {/* Search Section */}
+//         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+//           <div className="flex flex-col lg:flex-row gap-4 mb-6">
+//             <div className="flex-1 relative">
+//               <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+//               <input
+//                 type="text"
+//                 placeholder="Search courses..."
+//                 value={searchTerm}
+//                 onChange={(e) => setSearchTerm(e.target.value)}
+//                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+//               />
+//             </div>
+//             <select
+//               value={sortBy}
+//               onChange={(e) => setSortBy(e.target.value)}
+//               className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+//             >
+//               <option value="newest">Newest</option>
+//               <option value="popular">Most Popular</option>
+//               <option value="rating">Highest Rated</option>
+//               <option value="price-low">Price: Low to High</option>
+//               <option value="price-high">Price: High to Low</option>
+//             </select>
+//           </div>
+
+//           {/* Filters */}
+//           <div className="flex flex-col gap-4">
+//             {/* Category Filter */}
+//             <div>
+//               <p className="text-sm font-semibold text-gray-700 mb-3">
+//                 Category
+//               </p>
+//               <div className="flex flex-wrap gap-2">
+//                 {categories.map((category) => {
+//                   const Icon = category.icon;
+//                   return (
+//                     <button
+//                       key={category.value}
+//                       onClick={() => setSelectedCategory(category.value)}
+//                       className={`px-4 py-2 rounded-full font-medium flex items-center gap-2 transition ${
+//                         selectedCategory === category.value
+//                           ? "bg-blue-600 text-white"
+//                           : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+//                       }`}
+//                     >
+//                       <Icon className="w-4 h-4" />
+//                       {category.name}
+//                     </button>
+//                   );
+//                 })}
+//               </div>
+//             </div>
+
+//             {/* Level and Price Filters */}
+//             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//               <div>
+//                 <p className="text-sm font-semibold text-gray-700 mb-3">
+//                   Level
+//                 </p>
+//                 <div className="flex gap-2">
+//                   {["all", "Beginner", "Intermediate", "Advanced"].map(
+//                     (level) => (
+//                       <button
+//                         key={level}
+//                         onClick={() => setSelectedLevel(level)}
+//                         className={`px-3 py-1 rounded text-sm transition ${
+//                           selectedLevel === level
+//                             ? "bg-blue-600 text-white"
+//                             : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+//                         }`}
+//                       >
+//                         {level === "all" ? "All Levels" : level}
+//                       </button>
+//                     )
+//                   )}
+//                 </div>
+//               </div>
+
+//               <div>
+//                 <p className="text-sm font-semibold text-gray-700 mb-3">
+//                   Price
+//                 </p>
+//                 <select
+//                   value={priceRange}
+//                   onChange={(e) => setPriceRange(e.target.value)}
+//                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+//                 >
+//                   <option value="all">All Prices</option>
+//                   <option value="free">Free</option>
+//                   <option value="paid-low">$1 - $50</option>
+//                   <option value="paid-mid">$50 - $100</option>
+//                   <option value="paid-high">$100+</option>
+//                 </select>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* Bestseller Section */}
+//         {bestsellerCourses.length > 0 && (
+//           <div className="mb-12">
+//             <div className="flex items-center gap-2 mb-6">
+//               <FaCheckCircle className="text-green-600 w-6 h-6" />
+//               <h2 className="text-2xl font-bold text-gray-900">
+//                 Bestseller Courses
+//               </h2>
+//             </div>
+//             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+//               {bestsellerCourses.map((course) => {
+//                 const IconComponent =
+//                   iconMap[course.defaultCardColor] || FaBookOpen;
+//                 return (
+//                   <div
+//                     key={course.id}
+//                     className="bg-white rounded-lg shadow-md hover:shadow-lg transition overflow-hidden group h-full flex flex-col"
+//                   >
+//                     <div
+//                       className={`h-40 ${
+//                         colorClasses[course.defaultCardColor]
+//                       } flex items-center justify-center relative overflow-hidden`}
+//                     >
+//                       <FaBookOpen className="w-20 h-20 text-white opacity-80 group-hover:scale-110 transition" />
+//                       <div className="absolute top-3 left-3 bg-green-500 text-white px-2 py-1 rounded text-xs font-bold">
+//                         Bestseller
+//                       </div>
+//                       {course.isNew && (
+//                         <div className="absolute top-3 right-3 bg-yellow-400 text-gray-900 px-2 py-1 rounded text-xs font-bold">
+//                           NEW
+//                         </div>
+//                       )}
+//                     </div>
+
+//                     <div className="p-4 flex-1 flex flex-col">
+//                       <div className="mb-2">
+//                         <span className="text-xs font-semibold text-blue-600 uppercase">
+//                           {course.category}
+//                         </span>
+//                         <span className="text-xs font-semibold text-gray-500 ml-2 bg-gray-100 px-2 py-0.5 rounded">
+//                           {course.level}
+//                         </span>
+//                       </div>
+
+//                       <h3 className="font-bold text-gray-900 mb-2 line-clamp-2">
+//                         {course.title}
+//                       </h3>
+
+//                       <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+//                         {course.description}
+//                       </p>
+
+//                       <div className="flex items-center justify-between mb-3 text-sm">
+//                         <div className="flex items-center gap-1">
+//                           <FaStar className="text-yellow-500 w-4 h-4" />
+//                           <span className="font-medium">{course.rating}</span>
+//                           <span className="text-gray-500">
+//                             ({course.totalRatings})
+//                           </span>
+//                         </div>
+//                         <span className="text-gray-500">
+//                           {course.enrolledStudents.toLocaleString()}
+//                         </span>
+//                       </div>
+
+//                       <div className="flex items-center gap-3 text-xs text-gray-600 mb-3">
+//                         <span className="flex items-center gap-1">
+//                           <FaClock className="w-3 h-3" />
+//                           {course.duration}
+//                         </span>
+//                         <span className="flex items-center gap-1">
+//                           <FaPlay className="w-3 h-3" />
+//                           {course.totalLessons} lessons
+//                         </span>
+//                       </div>
+
+//                       <div className="border-t pt-3 mt-auto">
+//                         <div className="flex items-center justify-between mb-3">
+//                           <span className="text-xl font-bold text-gray-900">
+//                             ${course.price}
+//                           </span>
+//                           <span className="text-sm text-gray-500">
+//                             by {course.instructor}
+//                           </span>
+//                         </div>
+//                         <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2 text-sm font-medium">
+//                           <FaShoppingCart className="w-4 h-4" />
+//                           Enroll Now
+//                         </button>
+//                       </div>
+//                     </div>
+//                   </div>
+//                 );
+//               })}
+//             </div>
+//           </div>
+//         )}
+
+//         {/* All Courses Grid */}
+//         <div>
+//           <h2 className="text-2xl font-bold text-gray-900 mb-6">
+//             All Courses
+//             <span className="text-gray-500 text-lg ml-3">
+//               ({filteredCourses.length})
+//             </span>
+//           </h2>
+
+//           {filteredCourses.length > 0 ? (
+//             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+//               {filteredCourses.map((course) => (
+//                 <div
+//                   key={course.id}
+//                   className="bg-white rounded-lg shadow-sm hover:shadow-lg transition overflow-hidden group h-full flex flex-col"
+//                 >
+//                   <div
+//                     className={`h-32 ${
+//                       colorClasses[course.defaultCardColor]
+//                     } flex items-center justify-center relative`}
+//                   >
+//                     <FaBookOpen className="w-16 h-16 text-white opacity-80 group-hover:scale-110 transition" />
+//                     {course.isNew && (
+//                       <div className="absolute top-2 right-2 bg-yellow-400 text-gray-900 px-2 py-0.5 rounded text-xs font-bold">
+//                         NEW
+//                       </div>
+//                     )}
+//                   </div>
+
+//                   <div className="p-4 flex-1 flex flex-col">
+//                     <div className="mb-2">
+//                       <span className="text-xs font-semibold text-blue-600 uppercase">
+//                         {course.category}
+//                       </span>
+//                       <span className="text-xs font-semibold text-gray-500 ml-2 bg-gray-100 px-2 py-0.5 rounded">
+//                         {course.level}
+//                       </span>
+//                     </div>
+
+//                     <h3 className="font-bold text-gray-900 mb-2 line-clamp-2">
+//                       {course.title}
+//                     </h3>
+
+//                     <div className="flex items-center justify-between mb-2 text-sm">
+//                       <div className="flex items-center gap-1">
+//                         <FaStar className="text-yellow-500 w-3 h-3" />
+//                         <span className="font-medium">{course.rating}</span>
+//                         <span className="text-gray-500 text-xs">
+//                           ({course.totalRatings})
+//                         </span>
+//                       </div>
+//                     </div>
+
+//                     <div className="flex items-center gap-2 text-xs text-gray-600 mb-3">
+//                       <span className="flex items-center gap-1">
+//                         <FaClock className="w-3 h-3" />
+//                         {course.duration}
+//                       </span>
+//                       <span>•</span>
+//                       <span>{course.totalLessons} lessons</span>
+//                     </div>
+
+//                     <div className="border-t pt-3 mt-auto">
+//                       <div className="flex items-center justify-between mb-3">
+//                         <span className="text-lg font-bold text-gray-900">
+//                           ${course.price}
+//                         </span>
+//                       </div>
+//                       <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2 text-sm font-medium">
+//                         Enroll
+//                         <FaArrowRight className="w-3 h-3" />
+//                       </button>
+//                     </div>
+//                   </div>
+//                 </div>
+//               ))}
+//             </div>
+//           ) : (
+//             <div className="text-center py-16 bg-white rounded-lg">
+//               <FaFilter className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+//               <p className="text-gray-500 text-lg">
+//                 No courses found matching your criteria.
+//               </p>
+//               <p className="text-gray-400 text-sm mt-2">
+//                 Try adjusting your filters or search terms.
+//               </p>
+//             </div>
+//           )}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Courses;
+
+import React from "react";
 
 const Courses = () => {
-  const [activeTab, setActiveTab] = useState("all");
-  const [selectedCourse, setSelectedCourse] = useState(null);
-
-  const courseCategories = [
-    { id: "all", label: "All Courses", count: 8 },
-    { id: "writing", label: "Content Writing", count: 3 },
-    { id: "marketing", label: "Digital Marketing", count: 2 },
-    { id: "strategy", label: "Strategy", count: 2 },
-    { id: "business", label: "Business Growth", count: 1 },
-  ];
-
-  const courses = [
-    {
-      id: 1,
-      category: "writing",
-      title: "Complete Content Writing Mastery",
-      subtitle: "From beginner to professional writer",
-      description:
-        "Master the art of persuasive content writing with our comprehensive course covering everything from fundamentals to advanced techniques.",
-      instructor: "Sarah Mensah",
-      instructorTitle: "Senior Content Strategist",
-      rating: 4.9,
-      students: 1247,
-      duration: "12 hours",
-      lessons: 42,
-      level: "Beginner to Advanced",
-      price: "GH₵450",
-      originalPrice: "GH₵600",
-      image: "/api/placeholder/400/250",
-      features: [
-        "Writing fundamentals and techniques",
-        "SEO content optimization",
-        "Copywriting psychology",
-        "Brand voice development",
-        "Content planning strategies",
-        "Portfolio building guide",
-      ],
-      highlights: [
-        "42+ video lessons",
-        "Downloadable templates",
-        "Live Q&A sessions",
-        "Certificate of completion",
-        "Lifetime access",
-        "30-day money back guarantee",
-      ],
-      color: "purple",
-      bgGradient: "from-purple-500 to-purple-700",
-    },
-    {
-      id: 2,
-      category: "marketing",
-      title: "Digital Marketing Strategy Bootcamp",
-      subtitle: "Build winning marketing campaigns",
-      description:
-        "Learn to create data-driven digital marketing strategies that generate leads, increase conversions, and grow businesses.",
-      instructor: "Michael Asante",
-      instructorTitle: "Digital Marketing Expert",
-      rating: 4.8,
-      students: 892,
-      duration: "16 hours",
-      lessons: 38,
-      level: "Intermediate",
-      price: "GH₵650",
-      originalPrice: "GH₵850",
-      image: "/api/placeholder/400/250",
-      features: [
-        "Marketing funnel design",
-        "Social media strategy",
-        "Email marketing campaigns",
-        "Analytics and tracking",
-        "Content distribution",
-        "ROI optimization",
-      ],
-      highlights: [
-        "38+ comprehensive modules",
-        "Real campaign case studies",
-        "Marketing toolkit included",
-        "Expert feedback sessions",
-        "Industry certification",
-        "Job placement assistance",
-      ],
-      color: "blue",
-      bgGradient: "from-blue-500 to-blue-700",
-    },
-    {
-      id: 3,
-      category: "writing",
-      title: "Copywriting That Converts",
-      subtitle: "Write copy that sells",
-      description:
-        "Master the psychology of persuasive copywriting and learn to write sales pages, emails, and ads that convert prospects into customers.",
-      instructor: "Akosua Darko",
-      instructorTitle: "Conversion Copywriter",
-      rating: 4.9,
-      students: 634,
-      duration: "8 hours",
-      lessons: 24,
-      level: "Beginner to Intermediate",
-      price: "GH₵380",
-      originalPrice: "GH₵500",
-      image: "/api/placeholder/400/250",
-      features: [
-        "Conversion psychology principles",
-        "Sales page structure",
-        "Email sequence writing",
-        "Ad copy creation",
-        "A/B testing strategies",
-        "Client acquisition methods",
-      ],
-      highlights: [
-        "24+ actionable lessons",
-        "Copy templates library",
-        "Live copy critiques",
-        "Client project examples",
-        "Freelancer resources",
-        "Community access",
-      ],
-      color: "red",
-      bgGradient: "from-red-500 to-pink-500",
-    },
-    {
-      id: 4,
-      category: "strategy",
-      title: "Brand Storytelling Workshop",
-      subtitle: "Craft compelling brand narratives",
-      description:
-        "Learn to develop powerful brand stories that resonate with your audience and differentiate your business in the marketplace.",
-      instructor: "Kwame Nkrumah",
-      instructorTitle: "Brand Strategy Consultant",
-      rating: 4.7,
-      students: 456,
-      duration: "6 hours",
-      lessons: 18,
-      level: "All levels",
-      price: "GH₵320",
-      originalPrice: "GH₵420",
-      image: "/api/placeholder/400/250",
-      features: [
-        "Story structure frameworks",
-        "Brand archetype identification",
-        "Audience persona development",
-        "Narrative consistency",
-        "Emotional connection strategies",
-        "Story implementation tactics",
-      ],
-      highlights: [
-        "18+ storytelling modules",
-        "Brand story templates",
-        "Workshop recordings",
-        "Peer feedback sessions",
-        "Brand audit checklist",
-        "Follow-up mentoring",
-      ],
-      color: "green",
-      bgGradient: "from-green-500 to-green-700",
-    },
-    {
-      id: 5,
-      category: "marketing",
-      title: "Social Media Content Mastery",
-      subtitle: "Create content that engages",
-      description:
-        "Master the art of creating engaging social media content that builds communities, drives engagement, and converts followers into customers.",
-      instructor: "Ama Boateng",
-      instructorTitle: "Social Media Strategist",
-      rating: 4.8,
-      students: 789,
-      duration: "10 hours",
-      lessons: 32,
-      level: "Beginner to Advanced",
-      price: "GH₵420",
-      originalPrice: "GH₵550",
-      image: "/api/placeholder/400/250",
-      features: [
-        "Platform-specific strategies",
-        "Content calendar planning",
-        "Visual content creation",
-        "Community management",
-        "Influencer collaboration",
-        "Performance analytics",
-      ],
-      highlights: [
-        "32+ platform tutorials",
-        "Content templates pack",
-        "Live strategy sessions",
-        "Algorithm insights",
-        "Growth hacking techniques",
-        "Tool recommendations",
-      ],
-      color: "yellow",
-      bgGradient: "from-yellow-500 to-orange-500",
-    },
-    {
-      id: 6,
-      category: "writing",
-      title: "SEO Content Writing Pro",
-      subtitle: "Write content that ranks",
-      description:
-        "Learn to create content that both readers and search engines love. Master SEO writing techniques that drive organic traffic.",
-      instructor: "Prince Adjei",
-      instructorTitle: "SEO Content Specialist",
-      rating: 4.9,
-      students: 523,
-      duration: "9 hours",
-      lessons: 28,
-      level: "Intermediate",
-      price: "GH₵480",
-      originalPrice: "GH₵620",
-      image: "/api/placeholder/400/250",
-      features: [
-        "Keyword research mastery",
-        "On-page optimization",
-        "Content structure for SEO",
-        "Technical SEO basics",
-        "Link building strategies",
-        "Performance tracking",
-      ],
-      highlights: [
-        "28+ SEO tutorials",
-        "Keyword research tools",
-        "SEO audit templates",
-        "Google Analytics setup",
-        "Ranking case studies",
-        "SEO tool discounts",
-      ],
-      color: "indigo",
-      bgGradient: "from-indigo-500 to-purple-600",
-    },
-    {
-      id: 7,
-      category: "strategy",
-      title: "Content Strategy Blueprint",
-      subtitle: "Build winning content strategies",
-      description:
-        "Develop comprehensive content strategies that align with business goals, engage audiences, and drive measurable results.",
-      instructor: "Efua Mensah",
-      instructorTitle: "Content Strategy Director",
-      rating: 4.8,
-      students: 367,
-      duration: "14 hours",
-      lessons: 35,
-      level: "Advanced",
-      price: "GH₵580",
-      originalPrice: "GH₵750",
-      image: "/api/placeholder/400/250",
-      features: [
-        "Strategic planning frameworks",
-        "Content audit methodologies",
-        "Editorial calendar creation",
-        "Team management strategies",
-        "Budget planning and allocation",
-        "ROI measurement techniques",
-      ],
-      highlights: [
-        "35+ strategy modules",
-        "Planning templates",
-        "Case study analysis",
-        "Expert interviews",
-        "Strategy presentations",
-        "Certification pathway",
-      ],
-      color: "teal",
-      bgGradient: "from-teal-500 to-blue-600",
-    },
-    {
-      id: 8,
-      category: "business",
-      title: "Freelance Writing Business",
-      subtitle: "Build a profitable writing business",
-      description:
-        "Transform your writing skills into a thriving freelance business. Learn client acquisition, pricing, and business management.",
-      instructor: "Samuel Osei",
-      instructorTitle: "Freelance Business Coach",
-      rating: 4.9,
-      students: 445,
-      duration: "11 hours",
-      lessons: 30,
-      level: "All levels",
-      price: "GH₵520",
-      originalPrice: "GH₵680",
-      image: "/api/placeholder/400/250",
-      features: [
-        "Business setup and legal basics",
-        "Client acquisition strategies",
-        "Pricing and proposal writing",
-        "Project management systems",
-        "Financial management",
-        "Scaling your business",
-      ],
-      highlights: [
-        "30+ business modules",
-        "Client contract templates",
-        "Pricing calculator tool",
-        "Business plan template",
-        "Networking strategies",
-        "Ongoing mentorship",
-      ],
-      color: "orange",
-      bgGradient: "from-orange-500 to-red-500",
-    },
-  ];
-
-  const filteredCourses =
-    activeTab === "all"
-      ? courses
-      : courses.filter((course) => course.category === activeTab);
-
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl lg:text-6xl font-bold font-playfair mb-6">
-            Master Your <span className="gradient-text">Craft</span>
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto font-inter leading-relaxed mb-8">
-            Transform your career with our comprehensive courses designed by
-            industry experts. Learn content writing, digital marketing, and
-            business skills that drive real results.
-          </p>
-        </div>
-
-        {/* Course Categories */}
-        <div className="mb-12">
-          <div className="flex flex-wrap justify-center gap-4">
-            {courseCategories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setActiveTab(category.id)}
-                className={`tab-button px-6 py-3 rounded-full font-semibold font-inter ${
-                  activeTab === category.id
-                    ? "active"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                {category.label} ({category.count})
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Courses Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-          {filteredCourses.map((course) => (
-            <div
-              key={course.id}
-              className="course-card bg-white rounded-2xl shadow-lg overflow-hidden"
-            >
-              {/* Course Image */}
-              <div className="relative">
-                <div
-                  className={`h-48 bg-gradient-to-r ${course.bgGradient} flex items-center justify-center`}
-                >
-                  <FaBookOpen size={48} className="text-white opacity-50" />
-                </div>
-                <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full text-sm font-semibold text-purple-600">
-                  {course.level}
-                </div>
-                <div className="absolute bottom-4 left-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm flex items-center">
-                  <FaPlay className="mr-1" size={10} />
-                  {course.lessons} lessons
-                </div>
-              </div>
-
-              {/* Course Content */}
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <FaClock className="mr-1" size={12} />
-                    {course.duration}
-                  </div>
-                  <div className="flex items-center">
-                    <FaStar className="text-yellow-400 mr-1" size={14} />
-                    <span className="text-sm font-semibold text-gray-700">
-                      {course.rating} ({course.students})
-                    </span>
-                  </div>
-                </div>
-
-                <h3 className="text-xl font-bold font-playfair mb-2 text-gray-900">
-                  {course.title}
-                </h3>
-                <p className="text-purple-600 font-semibold font-inter mb-3 text-sm">
-                  {course.subtitle}
-                </p>
-                <p className="text-gray-600 font-inter text-sm mb-4 leading-relaxed">
-                  {course.description}
-                </p>
-
-                {/* Instructor */}
-                <div className="flex items-center mb-4">
-                  <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-yellow-500 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-white text-xs font-bold">
-                      {course.instructor
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
-                    </span>
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-gray-900 font-inter">
-                      {course.instructor}
-                    </div>
-                    <div className="text-xs text-gray-600 font-inter">
-                      {course.instructorTitle}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Key Features */}
-                <ul className="space-y-1 mb-6">
-                  {course.features.slice(0, 3).map((feature, idx) => (
-                    <li
-                      key={idx}
-                      className="flex items-center text-xs text-gray-600 font-inter"
-                    >
-                      <FaCheckCircle
-                        className="text-green-500 mr-2"
-                        size={10}
-                      />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Pricing */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center">
-                    <span className="text-2xl font-bold text-gray-900 font-inter">
-                      {course.price}
-                    </span>
-                    <span className="text-gray-500 line-through ml-2 font-inter">
-                      {course.originalPrice}
-                    </span>
-                  </div>
-                  <div className="text-sm text-green-600 font-semibold font-inter">
-                    Save{" "}
-                    {Math.round(
-                      (1 -
-                        parseInt(course.price.replace(/[^\d]/g, "")) /
-                          parseInt(
-                            course.originalPrice.replace(/[^\d]/g, "")
-                          )) *
-                        100
-                    )}
-                    %
-                  </div>
-                </div>
-
-                {/* CTA Buttons */}
-                <div className="space-y-2">
-                  <button
-                    className="w-full bg-gradient-to-r from-purple-600 to-yellow-500 text-white py-3 rounded-xl font-semibold font-inter hover:shadow-lg transition-all duration-300"
-                    onClick={() => setSelectedCourse(course)}
-                  >
-                    Enroll Now
-                  </button>
-                  <button className="w-full border border-gray-300 text-gray-700 py-2 rounded-xl font-medium font-inter hover:bg-gray-50 transition-colors duration-300 text-sm">
-                    View Details
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Course Details Modal */}
-        {selectedCourse && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-90vh overflow-y-auto">
-              <div className="p-8">
-                <div className="flex justify-between items-start mb-6">
-                  <div>
-                    <h2 className="text-3xl font-bold font-playfair mb-2">
-                      {selectedCourse.title}
-                    </h2>
-                    <p className="text-purple-600 font-semibold font-inter">
-                      {selectedCourse.subtitle}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => setSelectedCourse(null)}
-                    className="text-gray-500 hover:text-gray-700 text-2xl"
-                  >
-                    ×
-                  </button>
-                </div>
-
-                <div className="grid lg:grid-cols-2 gap-8">
-                  <div>
-                    <h3 className="text-xl font-semibold font-playfair mb-4">
-                      What You'll Learn:
-                    </h3>
-                    <ul className="space-y-3 mb-6">
-                      {selectedCourse.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-start">
-                          <FaCheckCircle
-                            className="text-green-500 mr-3 mt-1"
-                            size={16}
-                          />
-                          <span className="text-gray-700 font-inter">
-                            {feature}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <h3 className="text-xl font-semibold font-playfair mb-4">
-                      Course Highlights:
-                    </h3>
-                    <ul className="space-y-3">
-                      {selectedCourse.highlights.map((highlight, idx) => (
-                        <li key={idx} className="flex items-center">
-                          <FaAward className="text-yellow-500 mr-3" size={16} />
-                          <span className="text-gray-700 font-inter">
-                            {highlight}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="bg-gray-50 p-6 rounded-xl">
-                    <div className="text-center mb-6">
-                      <div className="text-3xl font-bold text-gray-900 font-inter mb-2">
-                        {selectedCourse.price}
-                      </div>
-                      <div className="text-gray-500 line-through font-inter">
-                        {selectedCourse.originalPrice}
-                      </div>
-                    </div>
-
-                    <div className="space-y-4 mb-6">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 font-inter">
-                          Duration:
-                        </span>
-                        <span className="font-semibold font-inter">
-                          {selectedCourse.duration}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 font-inter">
-                          Lessons:
-                        </span>
-                        <span className="font-semibold font-inter">
-                          {selectedCourse.lessons}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 font-inter">Level:</span>
-                        <span className="font-semibold font-inter">
-                          {selectedCourse.level}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 font-inter">
-                          Students:
-                        </span>
-                        <span className="font-semibold font-inter">
-                          {selectedCourse.students}+
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 font-inter">
-                          Access:
-                        </span>
-                        <span className="font-semibold font-inter flex items-center">
-                          <FaInfinity className="mr-1" size={14} />
-                          Lifetime
-                        </span>
-                      </div>
-                    </div>
-
-                    <button className="w-full bg-gradient-to-r from-purple-600 to-yellow-500 text-white py-4 rounded-xl font-bold font-inter text-lg mb-3 hover:shadow-lg transition-all duration-300">
-                      Enroll Now - {selectedCourse.price}
-                    </button>
-                    <p className="text-center text-sm text-gray-600 font-inter">
-                      30-day money-back guarantee
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </section>
+    <div>
+      <h1>COURSES PAGE</h1>
+    </div>
   );
 };
 
