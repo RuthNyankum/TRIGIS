@@ -1,285 +1,204 @@
-import React, { useState } from "react";
-import {
-  FaArrowRight,
-  FaCheckCircle,
-  FaStar,
-  FaQuoteLeft,
-  FaRocket,
-  FaAward,
-  FaUsers,
-  FaChartLine,
-  FaEnvelope,
-  FaDownload,
-  FaClock,
-} from "react-icons/fa";
-import "../../styles/services.css";
-
-import { services, processSteps, testimonials } from "../../constants/services";
-import { Link } from "react-router";
+import React, { useState, useEffect } from "react";
+import { FaSearch, FaFilter, FaStar } from "react-icons/fa";
+import api from "../../config/axios";
+import ServiceCard from "../../components/ServiceCard";
+import { COLOR_MAP, CATEGORIES } from "../../config/serviceConfig";
 
 const Services = () => {
-  const [activeService, setActiveService] = useState(0);
+  const [services, setServices] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [priceRange, setPriceRange] = useState("all");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+  const fetchServices = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get("/services/all?limit=100");
+      if (data.success) {
+        setServices(data.data);
+        setError("");
+      } else {
+        setError(data.message || "Failed to load services");
+      }
+    } catch (error) {
+      console.error("Error fetching services:", error);
+      setError("Failed to load services. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredServices = services.filter((service) => {
+    const matchesSearch =
+      service.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      service.description.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesCategory =
+      selectedCategory === "all" || service.category === selectedCategory;
+
+    let matchesPrice = true;
+    if (priceRange !== "all") {
+      const ranges = {
+        low: { min: 0, max: 100 },
+        medium: { min: 100, max: 500 },
+        high: { min: 500, max: 5000 },
+      };
+      const range = ranges[priceRange];
+      if (range) {
+        matchesPrice = service.price >= range.min && service.price <= range.max;
+      }
+    }
+
+    return matchesSearch && matchesCategory && matchesPrice;
+  });
+
+  const featuredServices = filteredServices.filter((s) => s.isFeatured);
 
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold font-playfair mb-6">
-            Our <span className="gradient-text">Services</span>
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto font-inter leading-relaxed">
-            Comprehensive content solutions designed to elevate your brand,
-            engage your audience, and drive measurable business growth.
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <div className="gradient-bg text-white py-12 mb-8">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <h1 className="text-4xl font-bold mb-4">Our Services</h1>
+          <p className="text-blue-100 text-lg">
+            Professional services to help your business succeed
           </p>
         </div>
+      </div>
 
-        {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-          {services.map((service, index) => {
-            const Icon = service.icon;
-            return (
-              <div
-                key={index}
-                className={`service-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer ${
-                  activeService === index ? "active-service" : ""
+      <div className="max-w-7xl mx-auto px-4">
+        {/* Search and Filters */}
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+          <div className="flex flex-col lg:flex-row gap-4 mb-6">
+            <div className="flex-1 relative">
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search services..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <select
+              value={priceRange}
+              onChange={(e) => setPriceRange(e.target.value)}
+              className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="all">All Prices</option>
+              <option value="low">₵0 - ₵1,000</option>
+              <option value="medium">₵1,000 - ₵5,000</option>
+              <option value="high">₵5,000+</option>
+            </select>
+          </div>
+
+          {/* Category Filter */}
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setSelectedCategory("all")}
+              className={`px-4 py-2 rounded-full font-medium transition ${
+                selectedCategory === "all"
+                  ? "gradient-bg text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+            >
+              All Categories
+            </button>
+            {CATEGORIES.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 py-2 rounded-full font-medium transition ${
+                  selectedCategory === category
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                 }`}
-                onClick={() => setActiveService(index)}
               >
-                {/* Service Icon */}
-                <div
-                  className={`inline-flex items-center justify-center w-16 h-16 rounded-xl mb-6 bg-gradient-to-r ${service.bgGradient}`}
-                >
-                  <Icon size={24} className="text-white" />
-                </div>
-
-                {/* Service Content */}
-                <h3 className="text-2xl font-bold font-playfair mb-3 text-gray-900">
-                  {service.title}
-                </h3>
-                <p className="text-[var(--brand-purple)] font-semibold font-inter mb-4">
-                  {service.subtitle}
-                </p>
-                <p className="text-gray-600 font-inter mb-6 leading-relaxed">
-                  {service.description}
-                </p>
-
-                {/* Features List */}
-                <ul className="space-y-2 mb-6">
-                  {service.features.slice(0, 3).map((feature, idx) => (
-                    <li
-                      key={idx}
-                      className="flex items-center text-sm text-gray-600 font-inter"
-                    >
-                      <FaCheckCircle
-                        className="text-green-500 mr-2"
-                        size={12}
-                      />
-                      {feature}
-                    </li>
-                  ))}
-                  {service.features.length > 3 && (
-                    <li className="text-sm text-[var(--brand-purple)] font-inter font-semibold">
-                      +{service.features.length - 3} more features
-                    </li>
-                  )}
-                </ul>
-
-                {/* CTA Button */}
-
-                <Link to={`/services/${service.id}`}>
-                  <button className="w-full bg-gradient-to-r from-[var(--brand-purple)] to-[var(--brand-yellow)] text-white py-3 rounded-xl font-semibold font-inter hover:shadow-lg transition-all duration-300 flex items-center justify-center group cursor-pointer">
-                    Learn More
-                    <FaArrowRight
-                      className="ml-2 group-hover:translate-x-1 transition-transform duration-200"
-                      size={14}
-                    />
-                  </button>
-                </Link>
-              </div>
-            );
-          })}
+                {category}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Service Details Modal/Section */}
-        {activeService !== null && (
-          <div className="bg-gray-50 rounded-2xl p-8 lg:p-12 mb-20">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              {/* Service Details */}
-              <div>
-                <div className="flex items-center mb-6">
-                  {React.createElement(services[activeService].icon, {
-                    size: 32,
-                    className: "text-[var(--brand-purple)] mr-4",
-                  })}
-                  <h3 className="text-3xl font-bold font-playfair text-gray-900">
-                    {services[activeService].title}
-                  </h3>
-                </div>
-
-                <p className="text-lg text-gray-700 font-inter mb-8 leading-relaxed">
-                  {services[activeService].description}
-                </p>
-
-                <div className="space-y-4">
-                  <h4 className="text-xl font-semibold font-playfair text-gray-900">
-                    What's Included:
-                  </h4>
-                  <ul className="grid md:grid-cols-2 gap-3">
-                    {services[activeService].features.map((feature, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-center text-gray-700 font-inter"
-                      >
-                        <FaCheckCircle
-                          className="text-green-500 mr-3"
-                          size={16}
-                        />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              {/* Service Stats/Benefits */}
-              <div className="bg-white rounded-xl p-8 shadow-lg">
-                <h4 className="text-2xl font-bold font-playfair mb-6 text-gray-900">
-                  Service Benefits
-                </h4>
-
-                <div className="space-y-6">
-                  <div className="flex items-start">
-                    <FaRocket
-                      className="text-[var(--brand-yellow)] mt-1 mr-4"
-                      size={20}
-                    />
-                    <div>
-                      <h5 className="font-semibold font-inter text-gray-900 mb-1">
-                        Fast Turnaround
-                      </h5>
-                      <p className="text-gray-600 font-inter text-sm">
-                        Quick delivery without compromising quality
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <FaAward
-                      className="text-[var(--brand-purple)] mt-1 mr-4"
-                      size={20}
-                    />
-                    <div>
-                      <h5 className="font-semibold font-inter text-gray-900 mb-1">
-                        Quality Guaranteed
-                      </h5>
-                      <p className="text-gray-600 font-inter text-sm">
-                        Premium quality backed by our guarantee
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <FaUsers className="text-blue-500 mt-1 mr-4" size={20} />
-                    <div>
-                      <h5 className="font-semibold font-inter text-gray-900 mb-1">
-                        Expert Team
-                      </h5>
-                      <p className="text-gray-600 font-inter text-sm">
-                        Experienced professionals in your industry
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <FaChartLine
-                      className="text-green-500 mt-1 mr-4"
-                      size={20}
-                    />
-                    <div>
-                      <h5 className="font-semibold font-inter text-gray-900 mb-1">
-                        Measurable Results
-                      </h5>
-                      <p className="text-gray-600 font-inter text-sm">
-                        Data-driven approach for optimal outcomes
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-8">
-                  <button className="w-full bg-gradient-to-r from-[var(--brand-purple)] to-[var(--brand-yellow)] text-white py-4 rounded-xl font-bold font-inter text-lg hover:shadow-lg transition-all duration-300">
-                    Get Started Today
-                  </button>
-                </div>
-              </div>
-            </div>
+        {error && (
+          <div className="mb-8 p-4 bg-red-100 text-red-800 rounded-lg">
+            {error}
           </div>
         )}
 
-        {/* Process Section */}
-        <div className="mb-20">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold font-playfair mb-4 text-gray-900">
-              Our <span className="gradient-text">Process</span>
-            </h3>
-            <p className="text-lg text-gray-600 font-inter max-w-2xl mx-auto">
-              A proven methodology that ensures exceptional results for every
-              project we undertake.
-            </p>
+        {loading ? (
+          <div className="text-center py-16">
+            <p className="text-gray-500 text-lg">Loading services...</p>
           </div>
+        ) : (
+          <>
+            {/* Featured Services */}
+            {featuredServices.length > 0 && (
+              <div className="mb-12">
+                <div className="flex items-center gap-2 mb-6">
+                  <FaStar className="text-yellow-500 w-6 h-6" />
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    Featured Services
+                  </h2>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {featuredServices.slice(0, 3).map((service) => (
+                    <ServiceCard key={service._id} service={service} />
+                  ))}
+                </div>
+              </div>
+            )}
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {processSteps.map((step, index) => {
-              const Icon = step.icon;
-              return (
-                <div key={index} className="process-step text-center">
-                  <div className="relative mb-6">
-                    <div className="w-20 h-20 bg-gradient-to-r from-[var(--brand-purple)] to-[var(--brand-yellow)] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                      <Icon size={24} className="text-white" />
-                    </div>
-                    <div className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-[var(--brand-yellow)]">
-                      <span className="text-xs font-bold text-[var(--brand-purple)] font-inter">
-                        {step.step}
-                      </span>
-                    </div>
-                  </div>
-
-                  <h4 className="text-xl font-semibold font-playfair mb-3 text-gray-900">
-                    {step.title}
-                  </h4>
-                  <p className="text-gray-600 font-inter text-sm leading-relaxed">
-                    {step.description}
+            {/* All Services */}
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                All Services
+              </h2>
+              {filteredServices.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredServices.map((service) => (
+                    <ServiceCard key={service._id} service={service} />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-16 bg-white rounded-lg">
+                  <FaFilter className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-500 text-lg">
+                    No services found matching your criteria.
+                  </p>
+                  <p className="text-gray-400 text-sm mt-2">
+                    Try adjusting your filters or search terms.
                   </p>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* CTA Section */}
-        <div className="gradient-bg rounded-2xl p-8 lg:p-12 text-center">
-          <h3 className="text-3xl lg:text-4xl font-bold font-playfair mb-6 text-white">
-            Ready to Transform Your Content Strategy?
-          </h3>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto font-inter leading-relaxed">
-            Let's discuss how our services can help you achieve your business
-            goals and drive meaningful growth.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-[var(--brand-purple)] px-8 py-4 rounded-full font-bold font-inter text-lg hover:bg-gray-100 transition-colors duration-300 flex items-center justify-center">
-              <FaEnvelope className="mr-2" />
-              Start Your Project
-            </button>
-            <button className="border-2 border-white text-white px-8 py-4 rounded-full font-bold font-inter text-lg hover:bg-white hover:text-[var(--brand-purple)] transition-all duration-300 flex items-center justify-center">
-              <FaDownload className="mr-2" />
-              Download Brochure
-            </button>
-          </div>
-        </div>
+              )}
+            </div>
+          </>
+        )}
       </div>
-    </section>
+
+      {/* CTA Section */}
+      {!loading && (
+        <div className="bg-blue-600 text-white py-16 mt-16">
+          <div className="max-w-7xl mx-auto px-4 text-center">
+            <h2 className="text-3xl font-bold mb-4">
+              Can't Find What You're Looking For?
+            </h2>
+            <p className="text-blue-100 mb-6">
+              Contact us for custom service offerings tailored to your needs.
+            </p>
+            <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-bold hover:bg-blue-50 transition">
+              Get in Touch
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
