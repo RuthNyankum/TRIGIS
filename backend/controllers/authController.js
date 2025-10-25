@@ -3,22 +3,62 @@ import User from "../models/user.js";
 import crypto from "crypto";
 import { sendMail } from "../config/sendMail.js";
 
-export const register = async (req, res, next) => {
-  const { fullName, email, phone, password, role } = req.body;
+// export const register = async (req, res, next) => {
+//   const { fullName, email, phone, password, role } = req.body;
 
-  if (!fullName || !email || !phone || !password || !role) {
+//   if (!fullName || !email || !phone || !password || !role) {
+//     const error = new Error("All fields are required");
+//     error.statusCode = 400;
+//     return next(error);
+//   }
+
+//   try {
+//     const user = await User.create(req.body);
+
+//     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+//       expiresIn: "1d",
+//     });
+
+//     res.cookie("jwt", token, {
+//       maxAge: 24 * 60 * 60 * 1000,
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === "production",
+//     });
+
+//     res.status(201).json({
+//       success: true,
+//       statusCode: 201,
+//       user,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+export const register = async (req, res, next) => {
+  const { fullName, email, phone, password } = req.body;
+
+  //  role removed from the validation check
+  if (!fullName || !email || !phone || !password) {
     const error = new Error("All fields are required");
     error.statusCode = 400;
     return next(error);
   }
 
   try {
-    const user = await User.create(req.body);
+    // Automatically use default role ("student")
+    const user = await User.create({
+      fullName,
+      email,
+      phone,
+      password,
+    });
 
+    // Sign a token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
 
+    // Set cookie
     res.cookie("jwt", token, {
       maxAge: 24 * 60 * 60 * 1000,
       httpOnly: true,
@@ -312,5 +352,38 @@ export const resetPassword = async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+  }
+};
+
+export const refreshAccessToken = async (req, res, next) => {
+  const refreshToken = req.cookies?.refreshJwt;
+  if (!refreshToken) {
+    return res.status(401).json({ message: "No refresh token found" });
+  }
+
+  try {
+    // Verify refresh token
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Generate new access token
+    const newAccessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+
+    // Send new access token cookie
+    res.cookie("jwt", newAccessToken, {
+      maxAge: 15 * 60 * 1000, // 15m
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    res.json({ success: true, accessToken: newAccessToken });
+  } catch (error) {
+    res.status(401).json({ message: "Invalid or expired refresh token" });
   }
 };

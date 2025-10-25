@@ -1,7 +1,10 @@
 import express from "express";
 import connectDB from "./config/db.js";
 import authRoute from "./routes/authRoute.js";
-import courseRoute from "./routes/courseRoute.js";
+// import courseRoute from "./routes/courseRoute.js";
+import adminCourseRoute from "./routes/adminCourseRoute.js";
+import adminRoute from "./routes/adminRoute.js";
+import serviceRoute from "./routes/servicesRoute.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import morgan from "morgan";
@@ -26,7 +29,10 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.use("/api/auth", authRoute);
-app.use("/api/courses", courseRoute);
+app.use("/api/admin", adminRoute);
+// app.use("/api/courses", courseRoute);
+app.use("/api/admin/courses", adminCourseRoute);
+app.use("/api/services", serviceRoute);
 
 app.use(errorHandler);
 
