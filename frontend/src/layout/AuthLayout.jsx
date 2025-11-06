@@ -7,11 +7,11 @@ const AuthLayout = () => {
         {/* ===== Left Section (Illustration) ===== */}
         <div className="hidden md:flex md:w-5/12 bg-gradient-to-br from-purple-600 to-yellow-500 items-center justify-center p-6 relative">
           <div className="text-center space-y-4 z-10">
-            <img
+            {/* <img
               src="https://gallery.manypixels.co/illustrations/flat-500/education.svg"
               alt="Learning Illustration"
               className="w-full max-w-xs mx-auto drop-shadow-2xl"
-            />
+            /> */}
             <div className="text-white space-y-2">
               {/* <h2 className="text-xl font-bold">Start Your Journey</h2>
               <p className="text-xs opacity-90 leading-relaxed px-4">

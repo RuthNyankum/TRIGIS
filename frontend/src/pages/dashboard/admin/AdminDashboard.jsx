@@ -1,37 +1,8 @@
-// import React from "react";
-// import DashboardLayout from "../../../layout/DashboardLayout";
-
-// const AdminDashboard = () => {
-//   const user = JSON.parse(localStorage.getItem("user")) || {};
-
-//   return (
-//     <DashboardLayout
-//       userRole={user.role || "admin"}
-//       userData={{
-//         fullName: user.fullName || "Admin User",
-//         email: user.email || "admin@example.com",
-//         initials: user.initials, // optional
-//       }}
-//     >
-//       {/* Admin dashboard content */}
-//       <h1 className="text-2xl font-bold">Admin Overview</h1>
-//       <p>
-//         Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore unde
-//         nisi animi quaerat. Eveniet ipsam accusamus delectus temporibus
-//         excepturi soluta. Magni, laborum ducimus expedita commodi corporis
-//         suscipit iusto necessitatibus veniam?
-//       </p>
-//     </DashboardLayout>
-//   );
-// };
-
-// export default AdminDashboard;
-
 import React, { useState } from "react";
 import {
   FaUsers,
   FaBookOpen,
-  FaDollarSign,
+  FaMoneyBillWave,
   FaChartLine,
   FaExclamationCircle,
   FaChartBar,
@@ -124,10 +95,10 @@ const AdminDashboard = () => {
             <div>
               <p className="text-gray-500 text-sm mb-1">Monthly Revenue</p>
               <p className="text-3xl font-bold text-gray-900">
-                ${stats.revenue.toLocaleString()}
+                ₵{stats.revenue.toLocaleString()}
               </p>
             </div>
-            <FaDollarSign className="w-10 h-10 text-green-500" />
+            <FaMoneyBillWave className="w-10 h-10 text-green-500" />
           </div>
           <div className="flex items-center gap-1 text-green-600 text-sm">
             <FaChartLine className="w-4 h-4" />

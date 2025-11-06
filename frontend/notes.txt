@@ -1,0 +1,3 @@
+im not using the admin settings and also settings layout, im using the shared one
+
+i install "npm install speakeasy"====== **speakeasy** is a Node.js library used for Two-Factor Authentication (2FA) — the same kind of extra security you see when apps ask you to enter a 6-digit code from Google Authenticator, Authy, or Microsoft Authenticator.

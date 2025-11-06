@@ -40,6 +40,13 @@ const userSchema = new Schema(
       default: "student",
       set: (value) => value.toLowerCase(), //always lowercase
     },
+    // role: {
+    //   type: String,
+    //   enum: ["student", "admin", "instructor", "superadmin"],
+    //   default: "student",
+    //   set: (value) => value.toLowerCase(),
+    // },
+
     // models/user.js (schema fields)
     resetPasswordToken: String,
     resetPasswordExpires: Date,

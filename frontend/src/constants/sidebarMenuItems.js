@@ -3,6 +3,7 @@ import {
   FaBookOpen,
   FaUsers,
   FaDollarSign,
+  FaUserShield,
   FaFileAlt,
   FaCog,
   FaGraduationCap,
@@ -25,12 +26,12 @@ export const adminMenuItems = [
     icon: FaBookOpen,
     path: "/admin/courses",
   },
-  {
-    id: "students",
-    label: "Students",
-    icon: FaUsers,
-    path: "/admin/students",
-  },
+  // {
+  //   id: "students",
+  //   label: "Students",
+  //   icon: FaUsers,
+  //   path: "/admin/students",
+  // },
   {
     id: "services",
     label: "Services",
@@ -46,7 +47,7 @@ export const adminMenuItems = [
   {
     id: "admins",
     label: "Manage Admin",
-    icon: FaDollarSign,
+    icon: FaUserShield,
     path: "/admin/admins",
   },
   { id: "settings", label: "Settings", icon: FaCog, path: "/admin/settings" },
@@ -89,5 +90,11 @@ export const studentMenuItems = [
     label: "My Profile",
     icon: FaUser,
     path: "/student/profile",
+  },
+  {
+    id: 6, // ← Add this entire object
+    label: "Settings",
+    path: "/student/settings",
+    icon: FaCog,
   },
 ];

@@ -122,7 +122,7 @@ const Hero = () => {
             </div>
 
             {/* Social Links */}
-            <div className="flex space-x-6 pt-6 relative z-20">
+            {/* <div className="flex space-x-6 pt-6 relative z-20">
               <div className="text-sm text-purple-300 font-inter mr-4">
                 Connect with us:
               </div>
@@ -139,7 +139,7 @@ const Hero = () => {
                   </button>
                 );
               })}
-            </div>
+            </div> */}
           </div>
 
           {/* Right Side - Team Illustration */}

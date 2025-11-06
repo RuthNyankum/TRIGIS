@@ -41,25 +41,31 @@ export const recentActivityData = [
 export const topCoursesData = [
   {
     id: 1,
-    title: "Advanced JavaScript",
-    students: 324,
-    revenue: 9720,
-    rating: 4.8,
+    title: "Business Plan Writing",
+    students: 410,
+    revenue: 12200,
+    rating: 4.9,
   },
   {
     id: 2,
-    title: "React Fundamentals",
-    students: 289,
-    revenue: 8670,
+    title: "Research Proposal Writing",
+    students: 365,
+    revenue: 10950,
+    rating: 4.8,
+  },
+  {
+    id: 3,
+    title: "Thesis & Dissertation Support",
+    students: 298,
+    revenue: 8940,
     rating: 4.7,
   },
-  { id: 3, title: "UI/UX Design", students: 256, revenue: 7680, rating: 4.9 },
   {
     id: 4,
-    title: "Python for Data Science",
-    students: 198,
-    revenue: 5940,
-    rating: 4.6,
+    title: "Data Analysis & Interpretation",
+    students: 257,
+    revenue: 7710,
+    rating: 4.8,
   },
 ];
 
