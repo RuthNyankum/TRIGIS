@@ -32,7 +32,7 @@ export const recentActivityData = [
   {
     id: 4,
     type: "payment",
-    message: "Payment received - $299",
+    message: "Payment received - ₵299",
     time: "3 hours ago",
     user: "Mike Johnson",
   },

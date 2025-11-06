@@ -77,12 +77,13 @@ const Hero = () => {
             {/* Greeting */}
             <div className="space-y-2">
               <p className="text-xl lg:text-2xl text-purple-200 font-inter">
-                Trusted by <span className="gradient-text font-bold">500+</span>{" "}
-                Growing Businesses
+                Trusted by{" "}
+                <span className="text-[#CCD431] font-bold">200+</span> Growing
+                Businesses
               </p>
               <h1 className="text-4xl lg:text-6xl font-bold font-playfair text-white leading-tight">
                 Expert{" "}
-                <span className="typing-text gradient-text">
+                <span className="typing-text text-[#CCD431]">
                   {WORDS[currentWord]}
                 </span>
               </h1>
@@ -90,14 +91,14 @@ const Hero = () => {
 
             {/* Description */}
             <div className="space-y-4">
-              <p className="text-lg lg:text-xl text-purple-100 font-inter leading-relaxed">
+              <p className="text-base lg:text-2xl text-purple-100 font-inter leading-relaxed">
                 TRIGIS Consult delivers premium content solutions that drive
                 measurable results. Our expert team transforms your ideas into
                 compelling narratives that engage audiences and accelerate
                 business growth.
               </p>
-              <p className="text-base lg:text-lg text-purple-200 font-inter">
-                Ready to elevate your brand's story? 🚀
+              <p className="text-sm lg:text-xl text-purple-200 font-inter">
+                Ready to elevate your brand's story?
               </p>
             </div>
 
