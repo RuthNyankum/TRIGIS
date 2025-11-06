@@ -163,7 +163,7 @@ const AdminDashboard = () => {
                     </td>
                     <td className="py-4 px-4">
                       <span className="text-green-600 font-medium">
-                        ${course.revenue.toLocaleString()}
+                        ₵{course.revenue.toLocaleString()}
                       </span>
                     </td>
                     <td className="py-4 px-4">
@@ -235,7 +235,7 @@ const AdminDashboard = () => {
               </p>
               <p className="text-xs text-gray-500">{data.students} students</p>
               <p className="text-xs text-green-600">
-                ${data.revenue.toLocaleString()}
+                ₵{data.revenue.toLocaleString()}
               </p>
             </div>
           ))}

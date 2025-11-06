@@ -668,14 +668,14 @@ const CourseDetails = () => {
                   <div className="mb-6">
                     <div className="flex items-baseline gap-2 mb-2">
                       <span className="text-4xl font-bold text-gray-900">
-                        ${course.price}
+                        ₵{course.price}
                       </span>
                     </div>
                   </div>
 
                   <button
                     onClick={handleEnroll}
-                    className="w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 transition font-bold text-lg shadow-lg hover:shadow-xl flex items-center justify-center gap-2 mb-3"
+                    className="w-full bg-purple-600 text-white py-4 rounded-lg hover:bg-purple-700 transition font-bold text-lg shadow-lg hover:shadow-xl flex items-center justify-center gap-2 mb-3 cursor-pointer"
                   >
                     <FaShoppingCart />
                     {user ? "Enroll Now" : "Login to Enroll"}
@@ -744,7 +744,7 @@ const CourseDetails = () => {
                       onClick={() => setActiveTab(tab)}
                       className={`flex-1 px-6 py-4 font-semibold capitalize transition ${
                         activeTab === tab
-                          ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50"
+                          ? "text-purple-600 border-b-2 border-purple-600 bg-purple-50"
                           : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                       }`}
                     >
@@ -1036,29 +1036,29 @@ const CourseDetails = () => {
               </h3>
               <div className="space-y-3 text-sm">
                 <div className="flex items-center gap-3 text-gray-700">
-                  <FaVideo className="text-blue-600" />
+                  <FaVideo className="text-purple-600" />
                   <span>{course.totalVideos} video lectures</span>
                 </div>
                 {course.totalArticles > 0 && (
                   <div className="flex items-center gap-3 text-gray-700">
-                    <FaBookOpen className="text-blue-600" />
+                    <FaBookOpen className="text-purple-600" />
                     <span>{course.totalArticles} articles</span>
                   </div>
                 )}
                 <div className="flex items-center gap-3 text-gray-700">
-                  <FaFileAlt className="text-blue-600" />
+                  <FaFileAlt className="text-purple-600" />
                   <span>Downloadable resources</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
-                  <FaMobile className="text-blue-600" />
+                  <FaMobile className="text-purple-600" />
                   <span>Access on mobile and TV</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
-                  <FaInfinity className="text-blue-600" />
+                  <FaInfinity className="text-purple-600" />
                   <span>Full lifetime access</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
-                  <FaCertificate className="text-blue-600" />
+                  <FaCertificate className="text-purple-600" />
                   <span>Certificate of completion</span>
                 </div>
               </div>

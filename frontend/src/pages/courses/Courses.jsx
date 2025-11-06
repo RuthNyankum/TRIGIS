@@ -459,9 +459,9 @@ const Courses = () => {
                                 e.stopPropagation();
                                 handleEnroll(course._id);
                               }}
-                              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2 text-sm font-medium"
+                              className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition flex items-center justify-center gap-2 text-sm font-medium"
                             >
-                              View Course
+                              View Course 
                               <FaArrowRight className="w-3 h-3" />
                             </button>
                           </div>
