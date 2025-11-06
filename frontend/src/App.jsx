@@ -11,6 +11,7 @@ import DashboardLayout from "./layout/DashboardLayout";
 // ===== Public Pages =====
 import Home from "./pages/home/Home";
 import Courses from "./pages/courses/Courses";
+import CourseDetails from "./pages/courses/CourseDetails";
 import Contact from "./pages/contact/Contact";
 import Services from "./pages/services/Services";
 import ServiceDetail from "./pages/services/ServiceDetail";
@@ -28,13 +29,14 @@ import StudentCourses from "./pages/dashboard/student/Courses";
 import Achievements from "./pages/dashboard/student/Achievements";
 import PurchaseHistory from "./pages/dashboard/student/PurchaseHistory";
 import StudentProfile from "./pages/dashboard/student/Profile";
+import Settings from "./pages/dashboard/shared/Settings";
 
 import AdminDashboard from "./pages/dashboard/admin/AdminDashboard";
 import ManageCourses from "./pages/dashboard/admin/Courses";
 import ManageStudents from "./pages/dashboard/admin/Students";
 import ManageServices from "./pages/dashboard/admin/Services";
 import Reports from "./pages/dashboard/admin/Reports";
-import AdminSettings from "./pages/dashboard/admin/Settings";
+// import AdminSettings from "./pages/dashboard/admin/Settings";
 import ManageAdmins from "./pages/dashboard/admin/ManageAdmins";
 // import ManageServices from "./pages/dashboard/admin/ManageServices";
 
@@ -53,6 +55,7 @@ function App() {
         { index: true, element: <Home /> },
         { path: "contact-us", element: <Contact /> },
         { path: "courses", element: <Courses /> },
+        { path: "courses/:id", element: <CourseDetails /> },
         { path: "services", element: <Services /> },
         { path: "services/:serviceId", element: <ServiceDetail /> },
       ],
@@ -80,6 +83,7 @@ function App() {
         { path: "achievements", element: <Achievements /> },
         { path: "purchases", element: <PurchaseHistory /> },
         { path: "profile", element: <StudentProfile /> },
+        { path: "settings", element: <Settings userRole="student" /> },
       ],
     },
 
@@ -101,7 +105,8 @@ function App() {
             </SuperAdminRoute>
           ),
         },
-        { path: "settings", element: <AdminSettings /> },
+        // { path: "settings", element: <AdminSettings /> },
+        { path: "settings", element: <Settings userRole="admin" /> },
         // { path: "services", element: <ManageServices /> },
       ],
     },

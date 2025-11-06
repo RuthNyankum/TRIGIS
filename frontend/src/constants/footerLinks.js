@@ -26,11 +26,11 @@ export const courses = [
 ];
 
 export const quickLinks = [
-  { name: "About Us", href: "/about-us" },
-  { name: "Portfolio", href: "/portfolio" },
-  { name: "Testimonials", href: "/testimonials" },
-  { name: "Blog", href: "/blog" },
-  { name: "FAQ", href: "/faq" },
+  { name: "About Us", href: "/" },
+  // { name: "Portfolio", href: "/portfolio" },
+  { name: "Testimonials", href: "/" },
+  // { name: "Blog", href: "/blog" },
+  { name: "FAQ", href: "/" },
   { name: "Contact", href: "/contact-us" },
 ];
 
@@ -38,31 +38,31 @@ export const socialLinks = [
   {
     name: "Facebook",
     icon: FaFacebookF,
-    href: "#",
+    href: "https://www.facebook.com/share/1F6dsmJdHA/",
     color: "hover:text-blue-600",
   },
-  {
-    name: "Twitter",
-    icon: FaTwitter,
-    href: "#",
-    color: "hover:text-sky-500",
-  },
-  {
-    name: "Instagram",
-    icon: FaInstagram,
-    href: "#",
-    color: "hover:text-pink-500",
-  },
+  // {
+  //   name: "Twitter",
+  //   icon: FaTwitter,
+  //   href: "#",
+  //   color: "hover:text-sky-500",
+  // },
+  // {
+  //   name: "Instagram",
+  //   icon: FaInstagram,
+  //   href: "#",
+  //   color: "hover:text-pink-500",
+  // },
   {
     name: "LinkedIn",
     icon: FaLinkedinIn,
-    href: "#",
+    href: "https://www.linkedin.com/in/agnes-gyesi-972812137/?originalSubdomain=gh",
     color: "hover:text-blue-700",
   },
-  {
-    name: "YouTube",
-    icon: FaYoutube,
-    href: "#",
-    color: "hover:text-red-500",
-  },
+  // {
+  //   name: "YouTube",
+  //   icon: FaYoutube,
+  //   href: "#",
+  //   color: "hover:text-red-500",
+  // },
 ];

@@ -145,7 +145,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
           </button>
 
           {/* Desktop Search Bar */}
-          <div className="relative hidden md:block">
+          {/* <div className="relative hidden md:block">
             <FaSearch
               className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-400"
               size={16}
@@ -155,11 +155,11 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
               placeholder="Search..."
               className="pl-10 pr-4 py-2 border-2 border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none w-48 lg:w-64 text-sm bg-purple-50/30 transition-all duration-300"
             />
-          </div>
+          </div> */}
 
           {/* Notifications */}
           <div className="relative" ref={notificationRef}>
-            <button
+            {/* <button
               onClick={() => setShowNotifications(!showNotifications)}
               className="relative p-2 hover:bg-purple-50 rounded-lg transition-colors"
             >
@@ -169,7 +169,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                   {unreadCount}
                 </span>
               )}
-            </button>
+            </button> */}
 
             {showNotifications && (
               <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border-2 border-purple-100 z-50 max-h-[80vh] overflow-hidden">
@@ -206,7 +206,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
           </div>
 
           {/* Profile Menu */}
-          <div className="relative" ref={profileRef}>
+          <div className="relative " ref={profileRef}>
             <button
               onClick={() => setShowProfileMenu(!showProfileMenu)}
               className="flex items-center gap-2 lg:gap-3 hover:bg-purple-50 p-2 rounded-lg transition-colors"
@@ -214,7 +214,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
               <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-r from-purple-600 to-yellow-400 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg">
                 {userInitials}
               </div>
-              <div className="text-left hidden lg:block">
+              <div className="text-left hidden lg:block cursor-pointer">
                 <p className="font-semibold text-gray-800 text-sm">
                   {userName}
                 </p>
@@ -235,11 +235,21 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                   <p className="text-sm text-gray-600">{userEmail}</p>
                 </div>
                 <div className="py-2">
-                  <button className="w-full px-4 py-2 text-left hover:bg-purple-50 flex items-center gap-3 text-gray-700 transition-colors">
+                  {/* <button className="w-full px-4 py-2 text-left hover:bg-purple-50 flex items-center gap-3 text-gray-700 transition-colors">
                     <FaUser size={16} className="text-purple-600" />
                     <span className="text-sm">My Profile</span>
-                  </button>
-                  <button className="w-full px-4 py-2 text-left hover:bg-purple-50 flex items-center gap-3 text-gray-700 transition-colors">
+                  </button> */}
+
+                  <button
+                    onClick={() => {
+                      // Map superadmin to admin route since they share the same dashboard
+                      const role =
+                        user.role === "superadmin" ? "admin" : user.role;
+                      navigate(`/${role}/settings`);
+                      setShowProfileMenu(false);
+                    }}
+                    className="w-full px-4 py-2 text-left hover:bg-purple-50 flex items-center gap-3 text-gray-700 transition-colors cursor-pointer"
+                  >
                     <FaCog size={16} className="text-purple-600" />
                     <span className="text-sm">Settings</span>
                   </button>
@@ -250,7 +260,9 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                     onClick={() => handleLogout(navigate)}
                   >
                     <FaSignOutAlt size={16} />
-                    <span className="text-sm font-medium">Logout</span>
+                    <span className="text-sm font-medium cursor-pointer">
+                      Logout
+                    </span>
                   </button>
                 </div>
               </div>
@@ -260,7 +272,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
       </div>
 
       {/* MOBILE SEARCH BAR */}
-      {showSearch && (
+      {/* {showSearch && (
         <div className="md:hidden px-4 pb-3 border-t border-purple-100 bg-purple-50/30">
           <div className="relative">
             <FaSearch
@@ -275,7 +287,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
             />
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

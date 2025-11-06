@@ -42,14 +42,6 @@ const Login = () => {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      // Navigate based on role
-      // if (user?.role === "admin") {
-      //   navigate("/admin/dashboard");
-      // } else if (user?.role === "student") {
-      //   navigate("/student/dashboard");
-      // } else {
-      //   navigate("/"); // fallback
-      // }
       if (user.role === "superadmin") {
         navigate("/admin/dashboard");
       } else if (user.role === "admin") {
@@ -137,7 +129,7 @@ const Login = () => {
               {/* Password */}
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-gray-700 font-inter flex items-center gap-2">
-                  <FaLock className="text-purple-600" size={14} />
+                  {/* <FaLock className="text-purple-600" size={14} /> */}
                   Password
                 </label>
                 <div className="relative">
@@ -177,7 +169,7 @@ const Login = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-semibold py-4 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl font-inter flex items-center justify-center gap-3"
+                className="w-full bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-semibold py-4 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl font-inter flex items-center justify-center gap-3 cursor-pointer"
               >
                 <FaSignInAlt size={16} />
                 Sign In
@@ -198,16 +190,16 @@ const Login = () => {
             </div>
 
             {/* Divider */}
-            <div className="my-8 flex items-center">
+            {/* <div className="my-8 flex items-center">
               <div className="flex-grow h-px bg-gray-200"></div>
               <span className="px-4 text-sm text-gray-500 font-inter">
                 or continue with
               </span>
               <div className="flex-grow h-px bg-gray-200"></div>
-            </div>
+            </div> */}
 
             {/* Social Login Options */}
-            <div className="space-y-3">
+            {/* <div className="space-y-3">
               <button
                 type="button"
                 className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-gray-200 rounded-xl hover:border-purple-300 hover:bg-gray-50 transition-all duration-300 font-inter text-gray-700"
@@ -237,7 +229,7 @@ const Login = () => {
                 </svg>
                 Continue with Google
               </button>
-            </div>
+            </div> */}
 
             {/* Trust Indicators */}
             <div className="mt-6 pt-6 border-t border-gray-200">

@@ -300,6 +300,8 @@ const About = () => {
 
                   <a
                     href="gyesiagnes22@gmail.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center space-x-2 bg-[var(--brand-purple)] hover:opacity-90 text-white px-6 py-3 rounded-full transition-opacity duration-200 font-inter cursor-pointer"
                   >
                     <FaEnvelope size={20} />

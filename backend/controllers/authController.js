@@ -376,14 +376,39 @@ export const refreshAccessToken = async (req, res, next) => {
     });
 
     // Send new access token cookie
-    res.cookie("jwt", newAccessToken, {
-      maxAge: 15 * 60 * 1000, // 15m
+    // res.cookie("jwt", newAccessToken, {
+    //   maxAge: 15 * 60 * 1000, // 15m
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    // });
+    res.cookie("refreshJwt", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      sameSite: "lax", // ✅ prevents Chrome from blocking it locally
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.json({ success: true, accessToken: newAccessToken });
   } catch (error) {
     res.status(401).json({ message: "Invalid or expired refresh token" });
+  }
+};
+
+// Add this function
+export const getCurrentUser = async (req, res) => {
+  try {
+    // Get user from token (you need to add auth middleware first)
+    const user = await User.findById(req.user._id).select("-password");
+
+    res.status(200).json({
+      success: true,
+      user: user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch user",
+      error: error.message,
+    });
   }
 };

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaSearch, FaFilter, FaStar } from "react-icons/fa";
 import api from "../../config/axios";
 import ServiceCard from "../../components/ServiceCard";
+import { Link } from "react-router";
 import { COLOR_MAP, CATEGORIES } from "../../config/serviceConfig";
 
 const Services = () => {
@@ -75,54 +76,71 @@ const Services = () => {
       <div className="max-w-7xl mx-auto px-4">
         {/* Search and Filters */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <div className="flex flex-col lg:flex-row gap-4 mb-6">
-            <div className="flex-1 relative">
+          {/* Search + Price Filter */}
+          <div className="flex flex-col lg:flex-row gap-4 mb-6 justify-center">
+            {/* Search Input */}
+            <div className="flex-1 relative max-w-md">
               <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search services..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7E1394] transition"
               />
             </div>
-            <select
-              value={priceRange}
-              onChange={(e) => setPriceRange(e.target.value)}
-              className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">All Prices</option>
-              <option value="low">₵0 - ₵1,000</option>
-              <option value="medium">₵1,000 - ₵5,000</option>
-              <option value="high">₵5,000+</option>
-            </select>
+
+            {/* Price Dropdown */}
+            <div>
+              <select
+                value={priceRange}
+                onChange={(e) => setPriceRange(e.target.value)}
+                className="px-4 py-3 border-2 border-transparent rounded-lg bg-white text-[#7E1394] font-medium 
+                  focus:outline-none focus:ring-2 focus:ring-[#7E1394] transition cursor-pointer 
+                hover:border-[#7E1394]"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(white, white), linear-gradient(to right, #7E1394, #CCD431)",
+                  backgroundOrigin: "border-box",
+                  backgroundClip: "padding-box, border-box",
+                }}
+              >
+                <option value="all">All Prices</option>
+                <option value="low">₵0 - ₵1,000</option>
+                <option value="medium">₵1,000 - ₵5,000</option>
+                <option value="high">₵5,000+</option>
+              </select>
+            </div>
           </div>
 
           {/* Category Filter */}
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setSelectedCategory("all")}
-              className={`px-4 py-2 rounded-full font-medium transition ${
-                selectedCategory === "all"
-                  ? "gradient-bg text-white"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
-            >
-              All Categories
-            </button>
-            {CATEGORIES.map((category) => (
+          <div className="flex justify-center">
+            <div className="flex flex-wrap justify-center gap-2">
               <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
+                onClick={() => setSelectedCategory("all")}
                 className={`px-4 py-2 rounded-full font-medium transition ${
-                  selectedCategory === category
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  selectedCategory === "all"
+                    ? "text-white bg-gradient-to-r from-[#7E1394] to-[#CCD431] shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:text-[#7E1394] hover:border-[#7E1394] hover:bg-gray-200"
                 }`}
               >
-                {category}
+                All Categories
               </button>
-            ))}
+
+              {CATEGORIES.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-4 py-2 rounded-full font-medium border transition ${
+                    selectedCategory === category
+                      ? "text-white bg-gradient-to-r from-[#7E1394] to-[#CCD431] shadow-md"
+                      : "bg-gray-100 text-gray-700 hover:text-[#7E1394] hover:border-[#7E1394] hover:bg-gray-200"
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -184,17 +202,23 @@ const Services = () => {
 
       {/* CTA Section */}
       {!loading && (
-        <div className="bg-blue-600 text-white py-16 mt-16">
+        <div
+          className="text-white py-16 mt-16"
+          style={{ background: "linear-gradient(to right, #7E1394, #CCD431)" }}
+        >
           <div className="max-w-7xl mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-4">
               Can't Find What You're Looking For?
             </h2>
-            <p className="text-blue-100 mb-6">
+            <p className="text-white/90 mb-6">
               Contact us for custom service offerings tailored to your needs.
             </p>
-            <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-bold hover:bg-blue-50 transition">
+            <Link
+              to="/contact-us"
+              className="inline-block bg-white text-[#7E1394] px-8 py-3 rounded-lg font-bold shadow-md hover:bg-[#f9f9f9] hover:shadow-lg transition"
+            >
               Get in Touch
-            </button>
+            </Link>
           </div>
         </div>
       )}
