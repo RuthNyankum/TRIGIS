@@ -1,25 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import {
   FaPaperPlane,
   FaCheckCircle,
   FaExclamationCircle,
   FaSpinner,
 } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  submitContactForm,
+  setFormField,
+  resetForm,
+  clearSubmitStatus,
+} from "../../redux/slice/users/contactFormSlice";
 
 const ContactForm = () => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    company: "",
-    service: "",
-    budget: "",
-    message: "",
-    projectType: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', null
+  const dispatch = useDispatch();
+
+  // Redux state
+  const { formData, isSubmitting, submitStatus, error } = useSelector(
+    (state) => state.contactForm
+  );
 
   const services = [
     "Content Writing & Copywriting",
@@ -49,63 +49,30 @@ const ContactForm = () => {
     "Custom Package",
   ];
 
+  // Auto-clear success status after 3 seconds
+  useEffect(() => {
+    if (submitStatus === "success") {
+      const timer = setTimeout(() => {
+        dispatch(clearSubmitStatus());
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [submitStatus, dispatch]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    dispatch(setFormField({ field: name, value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus(null);
-
-    try {
-      const response = await fetch("http://localhost:8000/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setSubmitStatus("success");
-        // Reset form after 3 seconds
-        setTimeout(() => {
-          setSubmitStatus(null);
-          setFormData({
-            firstName: "",
-            lastName: "",
-            email: "",
-            phone: "",
-            company: "",
-            service: "",
-            budget: "",
-            message: "",
-            projectType: "",
-          });
-        }, 3000);
-      } else {
-        setSubmitStatus("error");
-        console.error("Error:", data.message);
-      }
-    } catch (error) {
-      setSubmitStatus("error");
-      console.error("Error submitting form:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    dispatch(submitContactForm(formData));
   };
 
   if (submitStatus === "success") {
     return (
       <div className="success-animation text-center py-12">
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-green-500 rounded-full mb-6">
+        <div className="inline-flex items-center justify-center w-20 h-20 bg-green-500 rounded-full mb-6 animate-bounce">
           <FaCheckCircle size={32} className="text-white" />
         </div>
         <h3 className="text-2xl font-bold font-playfair mb-4 text-gray-900">
@@ -121,10 +88,11 @@ const ContactForm = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {submitStatus === "error" && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-center">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-center animate-shake">
           <FaExclamationCircle className="text-red-500 mr-3" size={20} />
           <p className="text-red-700 font-inter">
-            Something went wrong. Please try again or contact us directly.
+            {error ||
+              "Something went wrong. Please try again or contact us directly."}
           </p>
         </div>
       )}
@@ -140,7 +108,7 @@ const ContactForm = () => {
             value={formData.firstName}
             onChange={handleInputChange}
             required
-            className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
             placeholder="Enter your first name"
           />
         </div>
@@ -154,7 +122,7 @@ const ContactForm = () => {
             value={formData.lastName}
             onChange={handleInputChange}
             required
-            className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
             placeholder="Enter your last name"
           />
         </div>
@@ -171,7 +139,7 @@ const ContactForm = () => {
             value={formData.email}
             onChange={handleInputChange}
             required
-            className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
             placeholder="your@email.com"
           />
         </div>
@@ -184,7 +152,7 @@ const ContactForm = () => {
             name="phone"
             value={formData.phone}
             onChange={handleInputChange}
-            className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
             placeholder="+233 XX XXX XXXX"
           />
         </div>
@@ -199,7 +167,7 @@ const ContactForm = () => {
           name="company"
           value={formData.company}
           onChange={handleInputChange}
-          className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
           placeholder="Your company name"
         />
       </div>
@@ -214,7 +182,7 @@ const ContactForm = () => {
             value={formData.service}
             onChange={handleInputChange}
             required
-            className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
           >
             <option value="">Select a service</option>
             {services.map((service, index) => (
@@ -232,7 +200,7 @@ const ContactForm = () => {
             name="projectType"
             value={formData.projectType}
             onChange={handleInputChange}
-            className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
           >
             <option value="">Select project type</option>
             {projectTypes.map((type, index) => (
@@ -252,7 +220,7 @@ const ContactForm = () => {
           name="budget"
           value={formData.budget}
           onChange={handleInputChange}
-          className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
         >
           <option value="">Select budget range</option>
           {budgetRanges.map((range, index) => (
@@ -273,7 +241,7 @@ const ContactForm = () => {
           onChange={handleInputChange}
           required
           rows="4"
-          className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+          className="form-input w-full px-4 py-3 border border-gray-300 rounded-xl font-inter focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none transition"
           placeholder="Tell us about your project goals, timeline, and any specific requirements..."
         ></textarea>
       </div>
@@ -290,7 +258,7 @@ const ContactForm = () => {
           </>
         ) : (
           <>
-            <FaPaperPlane className="mr-2 group-hover:translate-x-1 transition-transform duration-200 " />
+            <FaPaperPlane className="mr-2 group-hover:translate-x-1 transition-transform duration-200" />
             Send Message
           </>
         )}

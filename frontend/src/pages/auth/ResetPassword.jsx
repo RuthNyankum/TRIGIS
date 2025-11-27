@@ -1,34 +1,27 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router";
-import api from "../../config/axios";
-import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { resetPassword } from "../../redux/slice/authSlice";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import loginIcons from "../../assets/images/trigis.jpg";
 
 const ResetPassword = () => {
   const { token } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.auth);
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match ❌");
-      return;
-    }
-
-    try {
-      const res = await api.post(`/auth/reset-password/${token}`, { password });
-      toast.success(res.data.message || "Password reset successful ✅");
-      navigate("/login");
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Token invalid/expired ❌");
-    }
+    if (password !== confirmPassword) return alert("Passwords do not match!");
+    dispatch(resetPassword({ token, password })).then((res) => {
+      if (res.meta.requestStatus === "fulfilled") navigate("/login");
+    });
   };
 
   return (
@@ -86,9 +79,10 @@ const ResetPassword = () => {
 
             <button
               type="submit"
+              disabled={loading}
               className="bg-red-600 hover:bg-red-700 text-white w-full px-6 py-2 max-w-[200px] rounded-full hover:scale-110 transition-all mx-auto block mt-6 cursor-pointer"
             >
-              Reset Password
+              {loading ? "Resetting..." : "Reset Password"}
             </button>
           </form>
         </div>

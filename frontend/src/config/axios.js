@@ -39,24 +39,58 @@ const api = axios.create({
   withCredentials: true, // ✅ send cookies with every request
 });
 
+// api.interceptors.response.use(
+//   (response) => response,
+//   async (error) => {
+//     const originalRequest = error.config;
+
+//     // Handle token expiry
+//     if (error.response?.status === 401 && !originalRequest._retry) {
+//       originalRequest._retry = true;
+
+//       try {
+//         // ✅ Correct method and ensure credentials are included
+//         await api.post("/auth/refresh-token", {}, { withCredentials: true });
+
+//         // ✅ Retry original request after successful refresh
+//         return api(originalRequest);
+//       } catch (refreshError) {
+//         console.error("Refresh token failed:", refreshError);
+//         window.location.href = "/login";
+//       }
+//     }
+
+//     return Promise.reject(error);
+//   }
+// );
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // Handle token expiry
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        // ✅ Correct method and ensure credentials are included
-        await api.post("/auth/refresh-token", {}, { withCredentials: true });
+        // Call refresh token endpoint
+        const res = await api.post(
+          "/auth/refresh-token",
+          {},
+          { withCredentials: true }
+        );
+        const newAccessToken = res.data.accessToken;
 
-        // ✅ Retry original request after successful refresh
+        // ✅ Update localStorage
+        localStorage.setItem("token", newAccessToken);
+
+        // ✅ Update Authorization header for retry
+        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+
+        // Retry original request
         return api(originalRequest);
       } catch (refreshError) {
         console.error("Refresh token failed:", refreshError);
-        window.location.href = "/login";
+        window.location.href = "/login"; // force logout
       }
     }
 

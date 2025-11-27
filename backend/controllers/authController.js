@@ -3,37 +3,6 @@ import User from "../models/user.js";
 import crypto from "crypto";
 import { sendMail } from "../config/sendMail.js";
 
-// export const register = async (req, res, next) => {
-//   const { fullName, email, phone, password, role } = req.body;
-
-//   if (!fullName || !email || !phone || !password || !role) {
-//     const error = new Error("All fields are required");
-//     error.statusCode = 400;
-//     return next(error);
-//   }
-
-//   try {
-//     const user = await User.create(req.body);
-
-//     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-//       expiresIn: "1d",
-//     });
-
-//     res.cookie("jwt", token, {
-//       maxAge: 24 * 60 * 60 * 1000,
-//       httpOnly: true,
-//       secure: process.env.NODE_ENV === "production",
-//     });
-
-//     res.status(201).json({
-//       success: true,
-//       statusCode: 201,
-//       user,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 export const register = async (req, res, next) => {
   const { fullName, email, phone, password } = req.body;
 
@@ -65,10 +34,16 @@ export const register = async (req, res, next) => {
       secure: process.env.NODE_ENV === "production",
     });
 
+    // res.status(201).json({
+    //   success: true,
+    //   statusCode: 201,
+    //   user,
+    // });
     res.status(201).json({
       success: true,
-      statusCode: 201,
       user,
+      token, // JWT here
+      message: "Registration successful!",
     });
   } catch (error) {
     next(error);
@@ -86,7 +61,6 @@ export const login = async (req, res, next) => {
 
   try {
     const user = await User.findOne({ email });
-
     if (!user) {
       const error = new Error("Incorrect email or password");
       error.statusCode = 401;
@@ -94,7 +68,6 @@ export const login = async (req, res, next) => {
     }
 
     const isSame = await user.compareTwoPasswords(password, user.password);
-
     if (!isSame) {
       const error = new Error("Incorrect email or password");
       error.statusCode = 401;
@@ -102,35 +75,37 @@ export const login = async (req, res, next) => {
     }
 
     // Generate access token (short expiry)
-    const accessToken = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "15m" } // 15 minutes
-    );
+    const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
 
     // Generate refresh token (long expiry)
     const refreshToken = jwt.sign(
       { id: user._id },
       process.env.JWT_REFRESH_SECRET,
-      { expiresIn: "7d" } // 7 days
+      { expiresIn: "7d" }
     );
 
-    // Send cookies
+    // Send cookies + JSON token
     res
       .cookie("jwt", accessToken, {
-        maxAge: 15 * 60 * 1000, // 15m
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: process.env.NODE_ENV === "production", // true on Render HTTPS
+        sameSite: "lax",
+        maxAge: 15 * 60 * 1000, // 15 minutes
       })
       .cookie("refreshJwt", refreshToken, {
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7d
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       })
       .status(200)
       .json({
         success: true,
-        user, // don’t send password
+        user,
+        token: accessToken, // ✅ include token for Redux
+        message: "Login successful!",
       });
   } catch (error) {
     next(error);
@@ -150,76 +125,6 @@ export const logout = async (req, res, next) => {
     next(error);
   }
 };
-
-// export const forgotPassword = async (req, res, next) => {
-//   const { email } = req.body;
-
-//   try {
-//     if (!email) {
-//       const error = new Error("Email is required");
-//       error.statusCode = 400;
-//       return next(error);
-//     }
-
-//     const user = await User.findOne({ email });
-
-//     if (!user) {
-//       const error = new Error("User with this email does not exist");
-//       error.statusCode = 400;
-//       return next(error);
-//     }
-
-//     const resetToken = crypto.randomBytes(16).toString("hex");
-
-//     user.resetPasswordToken = crypto
-//       .createHash("sha256")
-//       .update(resetToken)
-//       .digest("hex");
-
-//     user.resetPasswordExpires = Date.now() + 60 * 60 * 1000;
-
-//     await user.save({ validateBeforeSave: false });
-
-//     //for backend texting
-//     // const resetUrl = `${req.protocol}://${req.get(
-//     //   "host"
-//     // )}/api/auth/reset-password/${resetToken}`;
-
-//     ////frontend text, so will comment the backend
-//     const resetUrl = `${req.protocol}://localhost:5173/resetPassword/${resetToken}`;
-
-//     const subject = `There has been a password reset request`;
-
-//     const html = ` <p>This is the reset link:</p>
-//       <a href="${resetUrl}" target="_blank">Follow link</a>`;
-
-//     try {
-//       sendMail({
-//         to: user.email,
-//         subject,
-//         html,
-//       });
-
-//       res.status(200).json({
-//         success: true,
-//         message: "Link sent to email successfully",
-//       });
-//     } catch (error) {
-//       user.resetPasswordToken = undefined;
-//       user.resetPasswordTokenExpire = undefined;
-//       user.save({ validateBeforeSave: true });
-//       next(error);
-//     }
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Password reset token generated",
-//       resetToken,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 export const forgotPassword = async (req, res, next) => {
   const { email } = req.body;
@@ -375,26 +280,21 @@ export const refreshAccessToken = async (req, res, next) => {
       expiresIn: "15m",
     });
 
-    // Send new access token cookie
-    // res.cookie("jwt", newAccessToken, {
-    //   maxAge: 15 * 60 * 1000, // 15m
-    //   httpOnly: true,
-    //   secure: process.env.NODE_ENV === "production",
-    // });
+    // Update cookies (optional, keeps refresh token)
     res.cookie("refreshJwt", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax", // ✅ prevents Chrome from blocking it locally
+      sameSite: "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
+    // ✅ Return new access token in JSON so frontend Redux can update
     res.json({ success: true, accessToken: newAccessToken });
   } catch (error) {
     res.status(401).json({ message: "Invalid or expired refresh token" });
   }
 };
 
-// Add this function
 export const getCurrentUser = async (req, res) => {
   try {
     // Get user from token (you need to add auth middleware first)

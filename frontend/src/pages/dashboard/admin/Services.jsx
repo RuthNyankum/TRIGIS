@@ -1,123 +1,57 @@
 import React, { useState, useEffect } from "react";
-import { FaPlus, FaEdit, FaTrashAlt, FaEye } from "react-icons/fa";
+import { FaPlus, FaEye } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import ServiceCard from "../../../components/ServiceCard";
 import ServiceForm from "../../../components/ServiceForm";
 import ServiceDetailModal from "../../../components/ServiceDetailModal";
-import { INITIAL_FORM_STATE, serviceAPI } from "../../../config/serviceConfig";
+import {
+  fetchAdminServices,
+  deleteAdminService,
+  clearAdminMessage,
+} from "../../../redux/slice/admin/adminServicesSlice";
+import {
+  setEditingService,
+  clearEditingService,
+} from "../../../redux/slice/admin/adminServiceFormSlice";
 
 const ManageServices = () => {
-  const [services, setServices] = useState([]);
+  const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
-  const [editingId, setEditingId] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [formData, setFormData] = useState(INITIAL_FORM_STATE);
+
+  // Redux state
+  const { services, loading, message } = useSelector(
+    (state) => state.adminServices
+  );
+  const { message: formMessage } = useSelector(
+    (state) => state.adminServiceForm
+  );
 
   useEffect(() => {
-    fetchServices();
-  }, []);
+    dispatch(fetchAdminServices());
+  }, [dispatch]);
 
-  // Fetch all services
-  const fetchServices = async () => {
-    try {
-      const data = await serviceAPI.getAllServices();
-      if (data.success) {
-        setServices(data.data);
-        setMessage("");
-      } else {
-        setMessage(data.message || "Failed to load services");
-      }
-    } catch (error) {
-      console.error("Error fetching services:", error);
-      setMessage("Failed to load services");
+  // Clear messages after 5 seconds
+  useEffect(() => {
+    if (message || formMessage) {
+      const timer = setTimeout(() => {
+        dispatch(clearAdminMessage());
+      }, 5000);
+      return () => clearTimeout(timer);
     }
-  };
-
-  // Handle input changes
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
-  };
-
-  // Handle array field changes
-  const handleArrayChange = (field, index, value) => {
-    const arr = [...formData[field]];
-    arr[index] = value;
-    setFormData({ ...formData, [field]: arr });
-  };
-
-  // Add new array field
-  const addArrayField = (field) => {
-    setFormData({
-      ...formData,
-      [field]: [...formData[field], ""],
-    });
-  };
-
-  // Remove array field
-  const removeArrayField = (field, index) => {
-    setFormData({
-      ...formData,
-      [field]: formData[field].filter((_, i) => i !== index),
-    });
-  };
-
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      let response;
-      if (editingId) {
-        response = await serviceAPI.updateService(editingId, formData);
-      } else {
-        response = await serviceAPI.createService(formData);
-      }
-
-      if (response.success) {
-        setMessage(
-          editingId
-            ? "Service updated successfully ✅"
-            : "Service created successfully ✅"
-        );
-        fetchServices();
-        resetForm();
-      } else {
-        setMessage(response.message || "Error saving service");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setMessage("Failed to save service");
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [message, formMessage, dispatch]);
 
   // Handle edit
   const handleEdit = (service) => {
-    setFormData({
-      title: service.title,
-      description: service.description,
-      shortDescription: service.shortDescription || "",
-      category: service.category,
-      price: service.price,
-      pricingType: service.pricingType,
-      defaultCardColor: service.defaultCardColor,
-      deliveryTime: service.deliveryTime || "",
-      duration: service.duration || "",
-      features: service.features || [""],
-      requirements: service.requirements || [""],
-      tags: service.tags || [""],
-      isFeatured: service.isFeatured,
-      status: service.status,
-    });
-    setEditingId(service._id);
+    dispatch(
+      setEditingService({
+        ...service,
+        features: service.features || [""],
+        requirements: service.requirements || [""],
+        tags: service.tags || [""],
+      })
+    );
     setIsModalOpen(true);
   };
 
@@ -131,32 +65,19 @@ const ManageServices = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this service?"))
       return;
-
-    try {
-      const response = await serviceAPI.deleteService(id);
-      if (response.success) {
-        setMessage("Service deleted successfully ✅");
-        fetchServices();
-      } else {
-        setMessage(response.message || "Failed to delete service");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setMessage("Failed to delete service");
-    }
-  };
-
-  // Reset form
-  const resetForm = () => {
-    setFormData(INITIAL_FORM_STATE);
-    setEditingId(null);
-    setIsModalOpen(false);
+    dispatch(deleteAdminService(id));
   };
 
   // Open modal for new service
   const openNewServiceModal = () => {
-    resetForm();
+    dispatch(clearEditingService());
     setIsModalOpen(true);
+  };
+
+  // Close modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    dispatch(clearEditingService());
   };
 
   return (
@@ -179,45 +100,18 @@ const ManageServices = () => {
         </div>
 
         {/* Message Alert */}
-        {message && (
+        {(message || formMessage) && (
           <div
             className={`mb-4 p-4 rounded-lg ${
-              message.includes("✅")
+              (message || formMessage).includes("✅")
                 ? "bg-green-100 text-green-800"
                 : "bg-red-100 text-red-800"
             }`}
           >
-            {message}
+            {message || formMessage}
           </div>
         )}
 
-        {/* Stats Overview */}
-        {/* <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white p-4 rounded-lg shadow-sm">
-            <p className="text-gray-500 text-sm">Total Services</p>
-            <p className="text-2xl font-bold text-gray-900">
-              {services.length}
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm">
-            <p className="text-gray-500 text-sm">Active</p>
-            <p className="text-2xl font-bold text-green-600">
-              {services.filter((s) => s.status === "active").length}
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm">
-            <p className="text-gray-500 text-sm">Featured</p>
-            <p className="text-2xl font-bold text-blue-600">
-              {services.filter((s) => s.isFeatured).length}
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm">
-            <p className="text-gray-500 text-sm">Total Orders</p>
-            <p className="text-2xl font-bold text-purple-600">
-              {services.reduce((sum, s) => sum + (s.totalOrders || 0), 0)}
-            </p>
-          </div>
-        </div> */}
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white p-5 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
@@ -250,7 +144,11 @@ const ManageServices = () => {
         </div>
 
         {/* Services Grid */}
-        {services.length > 0 ? (
+        {loading ? (
+          <div className="text-center py-16">
+            <p className="text-gray-500 text-lg">Loading services...</p>
+          </div>
+        ) : services.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((service) => (
               <div key={service._id} className="relative">
@@ -281,19 +179,7 @@ const ManageServices = () => {
       </div>
 
       {/* Service Form Modal */}
-      {isModalOpen && (
-        <ServiceForm
-          formData={formData}
-          onChange={handleInputChange}
-          onArrayChange={handleArrayChange}
-          onAddArrayField={addArrayField}
-          onRemoveArrayField={removeArrayField}
-          onSubmit={handleSubmit}
-          onCancel={resetForm}
-          isLoading={loading}
-          isEditing={editingId !== null}
-        />
-      )}
+      {isModalOpen && <ServiceForm onCancel={closeModal} />}
 
       {/* Service Detail Modal */}
       {isDetailModalOpen && selectedService && (

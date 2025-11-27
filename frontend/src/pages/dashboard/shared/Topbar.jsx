@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
 import { handleLogout } from "../../../utils/handleLogout";
 import {
   FaBell,
@@ -21,6 +22,7 @@ const getInitials = (name) => {
 
 const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
@@ -255,9 +257,18 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                   </button>
                 </div>
                 <div className="border-t border-purple-100 py-2 bg-purple-50/30">
-                  <button
+                  {/* <button
                     className="w-full px-4 py-2 text-left hover:bg-purple-100 flex items-center gap-3 text-red-600 transition-colors"
                     onClick={() => handleLogout(navigate)}
+                  >
+                    <FaSignOutAlt size={16} />
+                    <span className="text-sm font-medium cursor-pointer">
+                      Logout
+                    </span>
+                  </button> */}
+                  <button
+                    className="w-full px-4 py-2 text-left hover:bg-purple-100 flex items-center gap-3 text-red-600 transition-colors"
+                    onClick={() => handleLogout(navigate, dispatch)}
                   >
                     <FaSignOutAlt size={16} />
                     <span className="text-sm font-medium cursor-pointer">

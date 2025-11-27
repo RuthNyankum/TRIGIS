@@ -1,65 +1,59 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { FaSearch, FaFilter, FaStar } from "react-icons/fa";
-import api from "../../config/axios";
+import { useDispatch, useSelector } from "react-redux";
 import ServiceCard from "../../components/ServiceCard";
 import { Link } from "react-router";
 import { COLOR_MAP, CATEGORIES } from "../../config/serviceConfig";
+import {
+  fetchServices,
+  setSearchTerm,
+  setSelectedCategory,
+  setPriceRange,
+} from "../../redux/slice/users/servicesSlice";
 
 const Services = () => {
-  const [services, setServices] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [priceRange, setPriceRange] = useState("all");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const dispatch = useDispatch();
+
+  // Redux state
+  const { services, loading, error, searchTerm, selectedCategory, priceRange } =
+    useSelector((state) => state.services);
 
   useEffect(() => {
-    fetchServices();
-  }, []);
+    dispatch(fetchServices());
+  }, [dispatch]);
 
-  const fetchServices = async () => {
-    try {
-      setLoading(true);
-      const { data } = await api.get("/services/all?limit=100");
-      if (data.success) {
-        setServices(data.data);
-        setError("");
-      } else {
-        setError(data.message || "Failed to load services");
+  // Filter services
+  const filteredServices = useMemo(() => {
+    return services.filter((service) => {
+      const matchesSearch =
+        service.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        service.description.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesCategory =
+        selectedCategory === "all" || service.category === selectedCategory;
+
+      let matchesPrice = true;
+      if (priceRange !== "all") {
+        const ranges = {
+          low: { min: 0, max: 1000 },
+          medium: { min: 1000, max: 5000 },
+          high: { min: 5000, max: Infinity },
+        };
+        const range = ranges[priceRange];
+        if (range) {
+          matchesPrice =
+            service.price >= range.min && service.price <= range.max;
+        }
       }
-    } catch (error) {
-      console.error("Error fetching services:", error);
-      setError("Failed to load services. Please try again later.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const filteredServices = services.filter((service) => {
-    const matchesSearch =
-      service.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      service.description.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesSearch && matchesCategory && matchesPrice;
+    });
+  }, [services, searchTerm, selectedCategory, priceRange]);
 
-    const matchesCategory =
-      selectedCategory === "all" || service.category === selectedCategory;
-
-    let matchesPrice = true;
-    if (priceRange !== "all") {
-      const ranges = {
-        low: { min: 0, max: 100 },
-        medium: { min: 100, max: 500 },
-        high: { min: 500, max: 5000 },
-      };
-      const range = ranges[priceRange];
-      if (range) {
-        matchesPrice = service.price >= range.min && service.price <= range.max;
-      }
-    }
-
-    return matchesSearch && matchesCategory && matchesPrice;
-  });
-
-  const featuredServices = filteredServices.filter((s) => s.isFeatured);
+  const featuredServices = useMemo(
+    () => filteredServices.filter((s) => s.isFeatured),
+    [filteredServices]
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -85,7 +79,7 @@ const Services = () => {
                 type="text"
                 placeholder="Search services..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => dispatch(setSearchTerm(e.target.value))}
                 className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7E1394] transition"
               />
             </div>
@@ -94,9 +88,9 @@ const Services = () => {
             <div>
               <select
                 value={priceRange}
-                onChange={(e) => setPriceRange(e.target.value)}
-                className="px-4 py-3 border-2 border-transparent rounded-lg bg-white text-[#7E1394] font-medium 
-                  focus:outline-none focus:ring-2 focus:ring-[#7E1394] transition cursor-pointer 
+                onChange={(e) => dispatch(setPriceRange(e.target.value))}
+                className="px-4 py-3 border-2 border-transparent rounded-lg bg-white text-[#7E1394] font-medium
+                  focus:outline-none focus:ring-2 focus:ring-[#7E1394] transition cursor-pointer
                 hover:border-[#7E1394]"
                 style={{
                   backgroundImage:
@@ -117,7 +111,7 @@ const Services = () => {
           <div className="flex justify-center">
             <div className="flex flex-wrap justify-center gap-2">
               <button
-                onClick={() => setSelectedCategory("all")}
+                onClick={() => dispatch(setSelectedCategory("all"))}
                 className={`px-4 py-2 rounded-full font-medium transition ${
                   selectedCategory === "all"
                     ? "text-white bg-gradient-to-r from-[#7E1394] to-[#CCD431] shadow-md"
@@ -130,7 +124,7 @@ const Services = () => {
               {CATEGORIES.map((category) => (
                 <button
                   key={category}
-                  onClick={() => setSelectedCategory(category)}
+                  onClick={() => dispatch(setSelectedCategory(category))}
                   className={`px-4 py-2 rounded-full font-medium border transition ${
                     selectedCategory === category
                       ? "text-white bg-gradient-to-r from-[#7E1394] to-[#CCD431] shadow-md"
