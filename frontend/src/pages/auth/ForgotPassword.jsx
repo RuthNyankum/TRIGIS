@@ -1,20 +1,18 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { forgotPassword } from "../../redux/slice/authSlice";
 import loginIcons from "../../assets/images/trigis.jpg";
-import { toast } from "react-toastify";
-import api from "../../config/axios";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.auth);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const res = await api.post("/auth/forgot-password", { email });
-      toast.success(res.data.message || "Reset link sent! 📧");
-      setEmail(""); // clear input
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Something went wrong ❌");
-    }
+    if (!email) return;
+    dispatch(forgotPassword(email));
+    setEmail("");
   };
 
   return (
@@ -43,9 +41,10 @@ const ForgotPassword = () => {
 
             <button
               type="submit"
+              disabled={loading}
               className="bg-red-600 hover:bg-red-700 text-white w-full px-6 py-2 max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-6 cursor-pointer"
             >
-              Send Reset Link
+              {loading ? "Sending..." : "Send Reset Link"}
             </button>
           </form>
         </div>

@@ -3,6 +3,7 @@ import "../../../styles/sidebar.css";
 import { FaBars, FaTimes, FaSignOutAlt } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router";
 import { handleLogout } from "../../../utils/handleLogout";
+import { useDispatch } from "react-redux";
 import {
   adminMenuItems,
   studentMenuItems,
@@ -16,6 +17,7 @@ const Sidebar = ({
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const menuItems = userRole === "admin" ? adminMenuItems : studentMenuItems;
 
@@ -156,7 +158,7 @@ const Sidebar = ({
           )}
           <button
             className="w-full flex items-center gap-3 p-3 hover:bg-purple-600 rounded-lg transition-colors"
-            onClick={() => handleLogout(navigate)}
+            onClick={() => handleLogout(navigate, dispatch)}
           >
             <FaSignOutAlt size={22} />
             {sidebarOpen && <span className="font-medium">Logout</span>}

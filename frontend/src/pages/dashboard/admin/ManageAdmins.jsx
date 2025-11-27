@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   FaUserShield,
   FaUserPlus,
@@ -10,24 +10,54 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { toast } from "react-toastify";
-import api from "../../../config/axios";
+import { useDispatch, useSelector } from "react-redux";
 import trigisLogo from "../../../assets/images/trigis.jpg";
+import {
+  fetchAdmins,
+  createAdmin,
+  updateAdmin,
+  deleteAdmin,
+  clearMessage,
+} from "../../../redux/slice/admin/adminManagementSlice";
+import {
+  setCreateFormField,
+  setPasswordStrength,
+  toggleShowPassword,
+  resetCreateForm,
+  setEditForm,
+  setEditFormField,
+  clearEditForm,
+} from "../../../redux/slice/admin/adminFormSlice";
 
 const ManageAdmins = () => {
-  const [admins, setAdmins] = useState([]);
-  const [form, setForm] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    password: "",
-  });
-  const [editForm, setEditForm] = useState(null); // For editing admins
-  const [strength, setStrength] = useState({ score: 0, level: "" });
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [editLoading, setEditLoading] = useState(false);
+  const dispatch = useDispatch();
 
-  // ✅ Password strength checker
+  // Redux state
+  const { admins, createLoading, updateLoading, message, error } = useSelector(
+    (state) => state.adminManagement
+  );
+  const { createForm, editForm, passwordStrength, showPassword } = useSelector(
+    (state) => state.adminForm
+  );
+
+  // Fetch admins on mount
+  useEffect(() => {
+    dispatch(fetchAdmins());
+  }, [dispatch]);
+
+  // Show toast messages
+  useEffect(() => {
+    if (message) {
+      toast.success(message);
+      dispatch(clearMessage());
+    }
+    if (error) {
+      toast.error(error);
+      dispatch(clearMessage());
+    }
+  }, [message, error, dispatch]);
+
+  // Password strength checker
   const checkPasswordStrength = (password) => {
     let score = 0;
     if (!password) return { score, level: "" };
@@ -41,117 +71,71 @@ const ManageAdmins = () => {
     return { score, level };
   };
 
-  // ✅ Fetch all admins
-  useEffect(() => {
-    const fetchAdmins = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await api.get("/admin/all", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setAdmins(res.data.admins);
-      } catch (error) {
-        console.error("Error fetching admins:", error);
-        toast.error("Failed to load admins ❌");
-      }
-    };
-    fetchAdmins();
-  }, []);
-
-  // ✅ Handle input changes
+  // Handle create form input changes
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    if (name === "password") setStrength(checkPasswordStrength(value));
+    dispatch(setCreateFormField({ field: name, value }));
+    if (name === "password") {
+      dispatch(setPasswordStrength(checkPasswordStrength(value)));
+    }
   };
 
-  // ✅ Create new admin
+  // Create new admin
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.fullName || !form.email || !form.phone || !form.password) {
+    if (
+      !createForm.fullName ||
+      !createForm.email ||
+      !createForm.phone ||
+      !createForm.password
+    ) {
       toast.error("All fields are required ❌");
       return;
     }
 
     try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      const res = await api.post("/admin/create", form, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      toast.success("Admin created successfully 🎉");
-      setAdmins((prev) => [...prev, res.data.admin]);
-      setForm({ fullName: "", email: "", phone: "", password: "" });
-      setStrength({ score: 0, level: "" });
+      await dispatch(createAdmin(createForm)).unwrap();
+      dispatch(resetCreateForm());
     } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Failed to create admin ❌");
-    } finally {
-      setLoading(false);
+      // Error is handled by Redux and useEffect
     }
   };
 
-  // ✅ Delete admin
+  // Delete admin
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this admin?")) return;
-    try {
-      const token = localStorage.getItem("token");
-      await api.delete(`/admin/delete/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setAdmins((prev) => prev.filter((a) => a._id !== id));
-      toast.success("Admin deleted successfully ✅");
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to delete admin ❌");
-    }
+    dispatch(deleteAdmin(id));
   };
 
-  // ✅ Start Editing
+  // Start editing
   const handleEdit = (admin) => {
-    setEditForm({
-      _id: admin._id,
-      fullName: admin.fullName,
-      email: admin.email,
-      phone: admin.phone,
-      password: "",
-    });
+    dispatch(
+      setEditForm({
+        _id: admin._id,
+        fullName: admin.fullName,
+        email: admin.email,
+        phone: admin.phone,
+        password: "",
+      })
+    );
   };
 
-  // ✅ Handle edit form changes
+  // Handle edit form changes
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    setEditForm((prev) => ({ ...prev, [name]: value }));
+    dispatch(setEditFormField({ field: name, value }));
   };
 
-  // ✅ Save admin updates
+  // Save admin updates
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      setEditLoading(true);
-      const token = localStorage.getItem("token");
-      await api.put(`/admin/update/${editForm._id}`, editForm, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setAdmins((prev) =>
-        prev.map((a) =>
-          a._id === editForm._id
-            ? {
-                ...a,
-                fullName: editForm.fullName,
-                email: editForm.email,
-                phone: editForm.phone,
-              }
-            : a
-        )
-      );
-      toast.success("Admin updated successfully ✅");
-      setEditForm(null);
+      await dispatch(
+        updateAdmin({ id: editForm._id, formData: editForm })
+      ).unwrap();
+      dispatch(clearEditForm());
     } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Failed to update admin ❌");
-    } finally {
-      setEditLoading(false);
+      // Error is handled by Redux and useEffect
     }
   };
 
@@ -194,7 +178,7 @@ const ManageAdmins = () => {
               <input
                 type="text"
                 name="fullName"
-                value={form.fullName}
+                value={createForm.fullName}
                 onChange={handleOnChange}
                 placeholder="Enter full name"
                 className="w-full p-3 border-2 border-gray-200 rounded-xl bg-gray-50 outline-none focus:border-purple-500 transition"
@@ -208,7 +192,7 @@ const ManageAdmins = () => {
               <input
                 type="email"
                 name="email"
-                value={form.email}
+                value={createForm.email}
                 onChange={handleOnChange}
                 placeholder="Enter email"
                 className="w-full p-3 border-2 border-gray-200 rounded-xl bg-gray-50 outline-none focus:border-purple-500 transition"
@@ -222,7 +206,7 @@ const ManageAdmins = () => {
               <input
                 type="text"
                 name="phone"
-                value={form.phone}
+                value={createForm.phone}
                 onChange={handleOnChange}
                 placeholder="Enter phone number"
                 className="w-full p-3 border-2 border-gray-200 rounded-xl bg-gray-50 outline-none focus:border-purple-500 transition"
@@ -237,29 +221,44 @@ const ManageAdmins = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  value={form.password}
+                  value={createForm.password}
                   onChange={handleOnChange}
                   placeholder="Enter password"
                   className="w-full p-3 pr-10 border-2 border-gray-200 rounded-xl bg-gray-50 outline-none focus:border-purple-500 transition"
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() => dispatch(toggleShowPassword())}
                   className="absolute right-3 top-3.5 text-gray-500 hover:text-purple-600 transition"
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
+              {passwordStrength.level && (
+                <div className="mt-1">
+                  <span
+                    className={`text-xs font-semibold ${
+                      passwordStrength.level === "Weak"
+                        ? "text-red-500"
+                        : passwordStrength.level === "Medium"
+                        ? "text-yellow-500"
+                        : "text-green-500"
+                    }`}
+                  >
+                    Password: {passwordStrength.level}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 
           <button
             type="submit"
-            disabled={loading}
-            className="mt-4 w-full md:w-auto bg-gradient-to-r from-purple-600 to-purple-800 text-white font-semibold py-3 px-6 rounded-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
+            disabled={createLoading}
+            className="mt-4 w-full md:w-auto bg-gradient-to-r from-purple-600 to-purple-800 text-white font-semibold py-3 px-6 rounded-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <FaUserPlus />
-            {loading ? "Creating..." : "Create Admin"}
+            {createLoading ? "Creating..." : "Create Admin"}
           </button>
         </form>
 
@@ -291,12 +290,14 @@ const ManageAdmins = () => {
                       <button
                         onClick={() => handleEdit(admin)}
                         className="text-blue-500 hover:text-blue-700 transition"
+                        title="Edit Admin"
                       >
                         <FaEdit />
                       </button>
                       <button
                         onClick={() => handleDelete(admin._id)}
                         className="text-red-500 hover:text-red-700 transition"
+                        title="Delete Admin"
                       >
                         <FaTrashAlt />
                       </button>
@@ -317,12 +318,12 @@ const ManageAdmins = () => {
           </table>
         </div>
 
-        {/* ✅ Edit Admin Modal */}
+        {/* Edit Admin Modal */}
         {editForm && (
           <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
             <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl relative">
               <button
-                onClick={() => setEditForm(null)}
+                onClick={() => dispatch(clearEditForm())}
                 className="absolute top-3 right-3 text-gray-500 hover:text-red-500"
               >
                 <FaTimes />
@@ -337,7 +338,7 @@ const ManageAdmins = () => {
                   value={editForm.fullName}
                   onChange={handleEditChange}
                   placeholder="Full Name"
-                  className="w-full p-3 border rounded-lg"
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
                 <input
                   type="email"
@@ -345,7 +346,7 @@ const ManageAdmins = () => {
                   value={editForm.email}
                   onChange={handleEditChange}
                   placeholder="Email"
-                  className="w-full p-3 border rounded-lg"
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
                 <input
                   type="text"
@@ -353,7 +354,7 @@ const ManageAdmins = () => {
                   value={editForm.phone}
                   onChange={handleEditChange}
                   placeholder="Phone"
-                  className="w-full p-3 border rounded-lg"
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
                 <input
                   type="password"
@@ -361,16 +362,16 @@ const ManageAdmins = () => {
                   value={editForm.password}
                   onChange={handleEditChange}
                   placeholder="New Password (optional)"
-                  className="w-full p-3 border rounded-lg"
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
 
                 <button
                   type="submit"
-                  disabled={editLoading}
-                  className="w-full bg-purple-700 text-white font-semibold py-3 rounded-lg hover:bg-purple-800 transition flex items-center justify-center gap-2"
+                  disabled={updateLoading}
+                  className="w-full bg-purple-700 text-white font-semibold py-3 rounded-lg hover:bg-purple-800 transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <FaSave />
-                  {editLoading ? "Saving..." : "Save Changes"}
+                  {updateLoading ? "Saving..." : "Save Changes"}
                 </button>
               </form>
             </div>

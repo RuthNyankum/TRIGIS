@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import loginIcons from "../../assets/images/trigis.jpg";
 import { FaEye, FaEyeSlash, FaUserPlus, FaShieldAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import api from "../../config/axios";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../../redux/slice/authSlice";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, error, isAuthenticated } = useSelector(
+    (state) => state.auth
+  );
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [data, setData] = useState({
@@ -17,6 +23,17 @@ const SignUp = () => {
     confirmPassword: "",
   });
 
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard"); // or wherever you want
+    }
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    if (error) toast.error(error);
+  }, [error]);
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setData((prev) => ({
@@ -25,7 +42,7 @@ const SignUp = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (data.password !== data.confirmPassword) {
@@ -33,31 +50,22 @@ const SignUp = () => {
       return;
     }
 
-    try {
-      const { confirmPassword, ...payload } = data;
-      const response = await api.post("/auth/register", payload);
+    const { confirmPassword, ...payload } = data;
 
-      console.log("Signup success:", response.data);
-      toast.success("Signup successful! 🎉 Redirecting...");
-
-      setData({
-        fullName: "",
-        email: "",
-        phone: "",
-        password: "",
-        confirmPassword: "",
-      });
-
-      // Redirect to login
-      setTimeout(() => {
-        navigate("/login");
-      }, 1500);
-    } catch (error) {
-      console.error("Signup error:", error.response?.data || error.message);
-      toast.error(
-        error.response?.data?.message || "Signup failed. Please try again."
-      );
-    }
+    dispatch(registerUser(payload))
+      .unwrap()
+      .then(() => {
+        toast.success("Signup successful! 🎉 Redirecting...");
+        setData({
+          fullName: "",
+          email: "",
+          phone: "",
+          password: "",
+          confirmPassword: "",
+        });
+        setTimeout(() => navigate("/login"), 1500);
+      })
+      .catch((err) => toast.error(err));
   };
 
   return (
@@ -109,8 +117,7 @@ const SignUp = () => {
             <form className="space-y-6" onSubmit={handleSubmit}>
               {/* Full Name */}
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700 font-inter flex items-center gap-2">
-                  {/* <FaUserPlus className="text-purple-600" size={14} /> */}
+                <label className="text-sm font-semibold text-gray-700 font-inter">
                   Full Name
                 </label>
                 <input
@@ -217,10 +224,18 @@ const SignUp = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-semibold py-4 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl font-inter flex items-center justify-center gap-3 cursor-pointer"
+                disabled={loading}
+                className={`w-full bg-gradient-to-r from-purple-600 to-purple-800 text-white font-semibold py-4 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl font-inter flex items-center justify-center gap-3 cursor-pointer ${
+                  loading ? "opacity-50 cursor-not-allowed" : ""
+                }`}
               >
-                <FaUserPlus size={16} />
-                Create Account
+                {loading ? (
+                  "Creating Account..."
+                ) : (
+                  <>
+                    <FaUserPlus size={16} /> Create Account
+                  </>
+                )}
               </button>
             </form>
 

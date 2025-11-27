@@ -1,4 +1,4 @@
-import api from "./axios";
+// config/serviceConfig.js
 
 export const CATEGORIES = [
   "Academic",
@@ -8,6 +8,10 @@ export const CATEGORIES = [
   "Support",
 ];
 
+// Pricing Types - Must match backend exactly!
+export const PRICING_TYPES = ["fixed", "hourly", "project-based", "monthly"];
+
+// Colors - Must match backend exactly!
 export const COLORS = [
   "purple",
   "blue",
@@ -18,8 +22,6 @@ export const COLORS = [
   "teal",
   "pink",
 ];
-
-export const PRICING_TYPES = ["fixed", "hourly", "project-based", "monthly"];
 
 export const COLOR_MAP = {
   purple: "bg-purple-500",
@@ -36,77 +38,35 @@ export const INITIAL_FORM_STATE = {
   title: "",
   description: "",
   shortDescription: "",
-  category: "Academic",
-  price: "",
-  pricingType: "fixed",
-  defaultCardColor: "blue",
+  category: "Academic", // Default to first category
+  price: 0,
+  pricingType: "fixed", // Default to first pricing type
+  defaultCardColor: "blue", // Default to backend default
   deliveryTime: "",
   duration: "",
+  status: "active",
+  isFeatured: false,
   features: [""],
   requirements: [""],
   tags: [""],
-  isFeatured: false,
-  status: "active",
 };
 
-// Clean data helper - removes empty strings from arrays
-const cleanData = (data) => ({
-  ...data,
-  features: data.features.filter((f) => f.trim()),
-  requirements: data.requirements.filter((r) => r.trim()),
-  tags: data.tags.filter((t) => t.trim()),
-});
-
-// Service API calls using your axios instance
+// API helper functions
 export const serviceAPI = {
   getAllServices: async () => {
-    try {
-      const { data } = await api.get("/services/all");
-      return data;
-    } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Error fetching services",
-      };
-    }
+    const { data } = await api.get("/services/all?limit=100");
+    return data;
   },
-
   createService: async (formData) => {
-    try {
-      const { data } = await api.post("/services/create", cleanData(formData));
-      return data;
-    } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Error creating service",
-      };
-    }
+    const { data } = await api.post("/services/create", formData);
+    return data;
   },
-
   updateService: async (id, formData) => {
-    try {
-      const { data } = await api.put(
-        `/services/update/${id}`,
-        cleanData(formData)
-      );
-      return data;
-    } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Error updating service",
-      };
-    }
+    const { data } = await api.put(`/services/update/${id}`, formData);
+    return data;
   },
-
   deleteService: async (id) => {
-    try {
-      const { data } = await api.delete(`/services/delete/${id}`);
-      return data;
-    } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Error deleting service",
-      };
-    }
+    const { data } = await api.delete(`/services/delete/${id}`);
+    return data;
   },
 };
