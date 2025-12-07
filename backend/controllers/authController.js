@@ -90,16 +90,17 @@ export const login = async (req, res, next) => {
     res
       .cookie("jwt", accessToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // true on Render HTTPS
-        sameSite: "lax",
-        maxAge: 15 * 60 * 1000, // 15 minutes
+        secure: true, // required for HTTPS on Render
+        sameSite: "None", // required for cross-origin
+        maxAge: 15 * 60 * 1000,
       })
       .cookie("refreshJwt", refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        secure: true,
+        sameSite: "None",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       })
+
       .status(200)
       .json({
         success: true,

@@ -10,8 +10,8 @@ import DashboardLayout from "./layout/DashboardLayout";
 
 // ===== Public Pages =====
 import Home from "./pages/home/Home";
-import Courses from "./pages/courses/Courses";
-import CourseDetails from "./pages/courses/CourseDetails";
+// import Courses from "./pages/courses/Courses";
+// import CourseDetails from "./pages/courses/CourseDetails";
 import Contact from "./pages/contact/Contact";
 import Services from "./pages/services/Services";
 import ServiceDetail from "./pages/services/ServiceDetail";
@@ -54,8 +54,8 @@ function App() {
       children: [
         { index: true, element: <Home /> },
         { path: "contact-us", element: <Contact /> },
-        { path: "courses", element: <Courses /> },
-        { path: "courses/:id", element: <CourseDetails /> },
+        // { path: "courses", element: <Courses /> },
+        // { path: "courses/:id", element: <CourseDetails /> },
         { path: "services", element: <Services /> },
         { path: "services/:serviceId", element: <ServiceDetail /> },
       ],

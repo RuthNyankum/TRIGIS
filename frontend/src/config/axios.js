@@ -35,8 +35,9 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8000/api",
-  withCredentials: true, // ✅ send cookies with every request
+  // baseURL: "http://localhost:8000/api",
+  baseURL: "https://trigis.onrender.com/api",
+  withCredentials: true, //  send cookies with every request
 });
 
 // api.interceptors.response.use(
@@ -80,17 +81,17 @@ api.interceptors.response.use(
         );
         const newAccessToken = res.data.accessToken;
 
-        // ✅ Update localStorage
+        //  Update localStorage
         localStorage.setItem("token", newAccessToken);
 
-        // ✅ Update Authorization header for retry
+        //  Update Authorization header for retry
         originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
 
         // Retry original request
         return api(originalRequest);
       } catch (refreshError) {
         console.error("Refresh token failed:", refreshError);
-        window.location.href = "/login"; // force logout
+        window.location.href = "/login";
       }
     }
 

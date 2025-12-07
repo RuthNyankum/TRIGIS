@@ -1,55 +1,3 @@
-// import express from "express";
-// import connectDB from "./config/db.js";
-// import authRoute from "./routes/authRoute.js";
-// import courseRoute from "./routes/courseRoute.js";
-// import adminRoute from "./routes/adminRoute.js";
-// import serviceRoute from "./routes/servicesRoute.js";
-// import cookieParser from "cookie-parser";
-// import cors from "cors";
-// import morgan from "morgan";
-// import { errorHandler } from "./middlewares/errorHandler.js";
-// import settingsRoutes from "./routes/settingsRoutes.js";
-// import adminSettingsRoutes from "./routes/adminSettingsRoutes.js";
-
-// import uploadRoutes from "./routes/uploadRoutes.js";
-// // import uploadRoutes from "./routes/uploads.js";
-// // import uploadRoutes from "./middlewares/upload.js";
-
-// const PORT = process.env.PORT || 8080;
-
-// const app = express();
-// app.use(express.json());
-
-// app.use(cookieParser());
-
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173",
-//     credentials: true,
-//   })
-// );
-
-// if (process.env.NODE_ENV === "development") {
-//   app.use(morgan("common"));
-// }
-// console.log("Cloudinary name:", process.env.CLOUDINARY_CLOUD_NAME);
-
-// // Routes
-// app.use("/api/auth", authRoute);
-// app.use("/api/admin", adminRoute);
-// app.use("/api/courses", courseRoute); // Unified course routes (admin, student, public)
-// app.use("/api/services", serviceRoute);
-// // app.use("/api/upload", uploadRoutes);
-// app.use("/api/settings", settingsRoutes);
-// app.use("/api/admin/settings", adminSettingsRoutes);
-
-// app.use(errorHandler);
-
-// app.listen(PORT, () => {
-//   connectDB();
-//   console.log(`Server listening on port ${PORT}`);
-// });
-
 import express from "express";
 import connectDB from "./config/db.js";
 import authRoute from "./routes/authRoute.js";
@@ -77,7 +25,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://trigisconsult.netlify.app"],
     credentials: true,
   })
 );
@@ -116,7 +64,8 @@ app.listen(PORT, () => {
   connectDB();
   console.log(`\n🚀 Server is running on port ${PORT}`);
   console.log(`📍 Environment: ${process.env.NODE_ENV || "development"}`);
-  console.log(`🌐 API: http://localhost:${PORT}`);
+  // console.log(`🌐 API: http://localhost:${PORT}`);
+  console.log(`🌐 API: ${process.env.BASE_URL || `http://localhost:${PORT}`}`);
   console.log(`💚 Health Check: http://localhost:${PORT}/api/health\n`);
 });
 
