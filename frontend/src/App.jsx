@@ -46,6 +46,11 @@ import Unauthorized from "./pages/errors/Uauthorised";
 import SuperAdminRoute from "./pages/dashboard/admin/SuperAdminRoute";
 
 function App() {
+  // Keep backend awake
+  useEffect(() => {
+    startKeepAlive();
+  }, []);
+
   const router = createBrowserRouter([
     // ===== Public Routes =====
     {
