@@ -1,5 +1,7 @@
 const BACKEND_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
 
+// NOTE: This file does NOT need React imports - it's pure JavaScript
+
 export const startKeepAlive = () => {
   // Ping backend every 10 minutes (600000 ms)
   setInterval(async () => {
