@@ -2,8 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router";
 import {
   FaStar,
-  FaMoneyBillWave, // ✅ replaced FaDollarSign
-  FaClock,
+  FaMoneyBillWave,
   FaCheckCircle,
   FaArrowRight,
   FaEdit,
