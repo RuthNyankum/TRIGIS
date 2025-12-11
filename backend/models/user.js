@@ -36,7 +36,7 @@ const userSchema = new Schema(
     }, // hashed
     role: {
       type: String,
-      enum: ["student", "admin"],
+      enum: ["student", "admin", "superadmin"],
       default: "student",
       set: (value) => value.toLowerCase(), //always lowercase
     },
